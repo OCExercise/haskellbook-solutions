@@ -25,11 +25,11 @@
 ## Building Functions
 
 1. Implement functions to perform the following
-    1. "Curry is awesome" => "Curry is awesome!"  
+    1. `"Curry is awesome" => "Curry is awesome!"`
         ```
         appendExclamation s = s ++ "!"
         ```
-    1. "Curry is awesome" => "y"
+    1. `"Curry is awesome" => "y"`
         ```
         -- trivial (deliberately missing the point, but permitted
         -- by the question as phrased)
@@ -56,7 +56,7 @@
             | otherwise = []
             where m = find (==c) s
         ```
-    1. "Curry is awesome" => "y"
+    1. `"Curry is awesome" => "y"`
         ```
         -- trivial (deliberately missing the point, but permitted
         -- by the question as phrased)
