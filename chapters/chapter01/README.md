@@ -35,9 +35,8 @@ For the sake of my fingers, going to use `\` in place of `λ`.
 
 ### Alpha equivalence (α-conversion)
 
-* Simply put, [alpha equivalence](https://en.wikipedia.org/wiki/Lambda_calculus#Alpha_equivalence) means the choice of symbols in the head does not matter. Provided the corresponding bound parameters in the body match those in the head, you can choose whatever symbols you like:
+* [alpha equivalence](https://en.wikipedia.org/wiki/Lambda_calculus#Alpha_equivalence) means the choice of symbols in the head does not matter. Provided the corresponding bound parameters in the body match those in the head, you can choose whatever symbols you like:
   * `\x.x == \y.y == \俺.俺` (α-conversion is not a scam; it's really just easy)
-* More formally, α-conversion renames bound parameters in the body along with renaming symbol declaration in the head.
 
 ### Beta reduction (β-reduction)
 
