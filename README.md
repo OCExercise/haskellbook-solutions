@@ -13,4 +13,4 @@ Errors are your fault. I wasn't even in town that day. But feel free to [bitch a
 
 ## AUTHOR
 
-Prez Cannady ([@revprez](https://github.com/revprez))
+Prez Cannady ([github](https://github.com/revprez))
