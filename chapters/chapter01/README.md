@@ -1,5 +1,9 @@
 # All you need is Lambda
 
+## Chapter Exercises
+
+Solutions availables [here](exercises/solutions.md).
+
 ## What is functional programming?
 
 * Functional programs combine **expressions**.
@@ -119,7 +123,7 @@ Our ultimate objective is getting an expression into **beta normal form**. That 
 1. Rojas, Raul, ["A Tutorial Introduction to the Lambda Calculus"](http://www.inf.fu-berlin.de/lehre/WS03/alpi/lambda.pdf). PDF
 1. Lezama, A. S., ["The Lambda Calculus"](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-820-fundamentals-of-program-analysis-fall-2015/lecture-notes/MIT6_820F15_L02.pdf). Slides
 
-# Assorted Problems
+## Assorted Problems
 1. ["CMSC330 Spring 2001, Practice Problems 5"](http://www.cs.umd.edu/class/spring2011/cmsc330/prac5-solutions.pdf). PDF
 1. ["Problem Set 1, 6.827, Multithreaded Parallelism"](http://ocw.alfaisal.edu/NR/rdonlyres/Electrical-Engineering-and-Computer-Science/6-827Multithreaded-Parallelism--Languages-and-CompilersFall2002/77E925A7-3CCB-42F2-9074-FF0A4019F039/0/ps1.pdf). PDF
 
