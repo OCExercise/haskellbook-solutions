@@ -6,7 +6,7 @@ Solutions availables [here](exercises/solutions.md).
 
 ## What is functional programming?
 
-* Functional programs combine **expressions**.
+* Functional programs combine **expressions** to evaluate to some result.
 * **Expressions** consist of:
   * concrete values (string literals, numbers, etc.)
   * variables (let's avoid a strict definition for now; go with your intuition)
