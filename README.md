@@ -11,4 +11,4 @@ Here follows my solutions to chapter exercises (and notes) from [Haskell Book](h
 
 ## AUTHOR
 
-Prez Cannady (@revprez)
+Prez Cannady ([@revprez](https://github.com/revprez))
