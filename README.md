@@ -11,6 +11,6 @@ Errors are your fault. I wasn't even in town that day. But feel free to [bitch a
 1. [Strings](chapters/chapter03/README.md) ([solutions](chapters/chapter03/exercises/README.md))
 1. [Basic datatypes](chapters/chapter04/README.md) ([solutions](chapters/chapter04/exercises/README.md))
 
-## AUTHOR
+## AUTHORS
 
 Prez Cannady ([github](https://github.com/revprez))
