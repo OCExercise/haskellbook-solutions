@@ -85,7 +85,7 @@ For the sake of my fingers, going to use `\` in place of `λ`.
                     = (\z.z)                              # [n := z]
 
     ```
-  *
+      
 ### η-conversion
 
 Not covered in this chapter, but [worth examining](https://en.wikipedia.org/wiki/Lambda_calculus#.CE.B7-conversion) in the context of reduction.
