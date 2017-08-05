@@ -1,6 +1,6 @@
 # Haskell Book Solutions (and Notes)
 
-Here follows my solutions to chapter exercises (and notes) from [Haskell Book](http://haskellbook.com/), a comprehensive introduction to the [Haskell language](https://www.haskell.org/) by [Christopher Allen](https://github.com/bitemyapp) and [Julie Moronuki](https://github.com/GinBaby).
+Here follows my solutions to chapter exercises (and notes) from [Haskell Book](http://haskellbook.com/), a comprehensive introduction to the [Haskell language](https://www.haskell.org/) by [Chris Allen](https://github.com/bitemyapp) and [Julie Moronuki](https://github.com/GinBaby).
 
 ## Chapters
 
