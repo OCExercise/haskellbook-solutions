@@ -58,7 +58,7 @@ For the sake of my fingers, going to use `\` in place of `λ`.
   * Chris actually gave us the term `(\z.a)` instead of `(\z.z)`. This would have resulted in a reduction to `a`.
   * Take `(\xy.xy) (\z.a) 1`
     ```
-    (\xy.xy) (\z.a) 1 = (\x.(\y.xy)) (\z.a) 1 # curried
+    (\xy.xy) (\z.a) 1 = (\x.(\y.xy)) (\z.a) 1 # curry
                       = (\y.(\z.a)y) 1        # [x := (\z.a)]
                       = (\z.a) 1              # [y := 1]
                       = a                     # [z := 1]
@@ -85,7 +85,7 @@ For the sake of my fingers, going to use `\` in place of `λ`.
                     = (\z.z)                              # [n := z]
 
     ```
-      
+
 ### η-conversion
 
 Not covered in this chapter, but [worth examining](https://en.wikipedia.org/wiki/Lambda_calculus#.CE.B7-conversion) in the context of reduction.
