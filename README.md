@@ -1,6 +1,8 @@
 # Haskell Book Solutions (and Notes)
 
-Here follows my solutions to chapter exercises (and notes) from [Haskell Book](http://haskellbook.com/), a comprehensive introduction to the [Haskell language](https://www.haskell.org/) by [Chris Allen](https://github.com/bitemyapp) and [Julie Moronuki](https://github.com/GinBaby).
+Here follows my notes and solutions to chapter exercises while plowing through [Haskell Book](http://haskellbook.com/), a comprehensive introduction to the [Haskell language](https://www.haskell.org/) by [Chris Allen](https://github.com/bitemyapp) and [Julie Moronuki](https://github.com/GinBaby). You should [buy it](https://gumroad.com/l/haskellbook). Especially when the epub comes out.
+
+Errors are your fault. I wasn't even in town that day. But feel free to [bitch about it](https://github.com/OCExercise/haskellbook-solutions/issues). I'll clean up your mess.
 
 ## Chapters
 
