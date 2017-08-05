@@ -11,7 +11,7 @@ Solutions availables [here](exercises/solutions.md).
   * concrete values (string literals, numbers, etc.)
   * variables (let's avoid a strict definition for now; go with your intuition)
   * functions (operations of varying degrees of [arity](https://en.wikipedia.org/wiki/Arity))
-* [Paul Hudak](["A brief and information introduction to lambda calculus"](http://www.cs.yale.edu/homes/hudak/CS201S08/lambda.pdf) presents an alternative formulation if the form of **terms**, which include :
+* [Paul Hudak](http://www.cs.yale.edu/homes/hudak/CS201S08/lambda.pdf) presents an alternative formulation if the form of **terms**, which include :
   * x (variables)
   * \x. e (abstractions, think functions: `e` here is shorthand for an expression, not an **unbound term**)
   * e1 e2 (applications, an expression applied to another--think function application)
