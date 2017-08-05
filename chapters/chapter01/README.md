@@ -66,17 +66,17 @@ For the sake of my fingers, going to use `\` in place of `λ`.
 * Some more complicated examples from Chris:
   * `(\xy.xxy)(\x.xy)(\x.xz)`
   * `(\xyz.xz(yz))(\mn.m)(\p.p)`
-    * Curry: `(\x.\y.\z.xz(yz))(\m.\n.m)(\p.p)` # curry
-    * Pass first arg `(\m.\n.m)` to `(\x.\y.\z.xz(yz))` to yield:
-      * `(\y.\z.(\m.\n.m)z(yz))(\p.p)`
-    * Pass second arg `(\p.p)` to `(\y.\z.(\m.\n.m)z(yz))` to yield:
-      * `(\z.(\m.\n.m) z (\p.p) z)`
-    * From there:
-      ```
-      (\z.(\m.\n.m) z (\p.p) z) = (\z.(\n.z) ((\p.p) z)) # rename 'm' -> 'z'
-                                = (\z.(\n.z) z )         # identity on 'z'
-                                = (\z.z)                 # rename 'n' -> 'z'
-      ```
+    ```
+    (\xyz.xz(yz)) (\mn.m) (\p.p)
+                    = (\x.\y.\z.xz(yz)) (\m.\n.m) (\p.p)  # curry
+                    = (\y.\z.(\m.\n.m)z(yz)) (\p.p)       # [x := (\m.\n.m)]
+                    = (\z.(\m.\n.m)) z ((\.p.p)z)         # [y := (\p.p)]
+                    = (\z.(\m.\n.m)) z ((\.p.p)z)         # [y := (\p.p)]
+                    = (\z.(\n.z)) ((\p.p)z)               # [m := z]
+                    = (\z.(\n.z) z)                       # (\p.p) is identity
+                    = (\z.z)                              # [n := z]
+
+    ```
   *
 ### η-conversion
 
@@ -129,4 +129,4 @@ Our ultimate objective is getting an expression into **beta normal form**. That 
 
 ## Tools
 
-1. ["\ Calculus Interpreter"](https://people.eecs.berkeley.edu/~gongliang13/lambda/): I'm not quite confident this is implemented correctly, but useful on some basic sanity checks.
+1. ["Lambda Calculus Interpreter"](https://people.eecs.berkeley.edu/~gongliang13/lambda/): I'm not quite confident this is implemented correctly, but useful on some basic sanity checks.
