@@ -12,9 +12,9 @@ Solutions availables [here](exercises/solutions.md).
   * variables (let's avoid a strict definition for now; go with your intuition)
   * functions (operations of varying degrees of [arity](https://en.wikipedia.org/wiki/Arity))
 * [Paul Hudak](http://www.cs.yale.edu/homes/hudak/CS201S08/lambda.pdf) presents an alternative formulation if the form of **terms**, which include :
-  * x (variables)
-  * \x. e (abstractions, think functions: `e` here is shorthand for an expression, not an **unbound term**)
-  * e1 e2 (applications, an expression applied to another--think function application)
+  * `x` (variables)
+  * `\x. e` (abstractions, think functions: `e` here is shorthand for an expression, not an **unbound term**)
+  * `e1 e2` (applications, an expression applied to another--think function application)
 * **Purity (referential transparency)**: Given an expression and complete specification of its terms, it will always evaluate to the same result.
 
 ## What is a function?
