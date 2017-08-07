@@ -83,8 +83,7 @@ These are just the highlights. Read 2.2 straight for more, and consult the [docu
     * `(9 + 5) * 3 -> 42`
     * `(9 - 5) -> 4`
 
-
-
+### Functions
 
 ## Additional reading
 

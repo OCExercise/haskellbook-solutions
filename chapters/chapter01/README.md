@@ -122,6 +122,10 @@ Our ultimate objective is getting an expression into **beta normal form**. That 
   * The [Y combinator](https://en.wikipedia.org/wiki/Fixed-point_combinator#Fixed_point_combinators_in_lambda_calculus) also diverges
 
 
+## A brief digression: Arithmetic
+
+* [Haskell Book]()
+
 ## Additional reading
 
 1. ["Lamba Calculus"](https://en.wikipedia.org/wiki/Lambda_calculus), Wikipedia
