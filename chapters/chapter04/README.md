@@ -17,7 +17,7 @@
 * All numerics have **[instances]()** of **[typeclass]()** `Num` (both concepts remain to be introduced).
 * Playing around with the `Int` primitives, noting:
     * [Two's complement](https://en.wikipedia.org/wiki/Two%27s_complement) fixed precision implementation:
-    ```
+    ```haskell
     ghci> 127::Int8
     127
     ghci> 128::Int8
@@ -67,7 +67,7 @@
 
 Main take away here is there's no evaluation of `Num` to some sort of `Bool` as you might expect in some other languages. Chris's example is:
 
-```
+```haskell
 ghci> x = 0
 ghci> if x * 100 == 0 then "adopt a dog" else "or a cat"
 "adopt a dog"
@@ -86,7 +86,7 @@ I personally think this is very sane in this day and age.
 ## Tuples
 
 Not breaking much new ground here. I'll just leave this with the type signatures for `fst` and `snd` (self explanatory) and Chris's admonition not to go crazy with tuple size (keep it 5 or less, mmm'kay?).
-```
+```haskell
 ghci> :t fst
 fst :: (a, b) -> a
 ghci> :t snd
@@ -99,7 +99,7 @@ Lists are what you expect. Elements have the same type.
 
 * Empty list: `[]`
 * Strings are `[Char]`:
-    ```
+    ```haskell
     ghci> x = "test"
     ghci> y = ['t','e','s','t']
     ghci> x
@@ -108,7 +108,7 @@ Lists are what you expect. Elements have the same type.
     "test"
     ```
 * Concatenation works on lists of anything
-    ```
+    ```haskell
     ghci> import Mood
     ghci> [Woot] ++ [Blah]
     [Woot,Blah]
