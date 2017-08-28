@@ -8,19 +8,19 @@ Solutions availables [here](exercises/solutions.md).
 
 * Functional programs combine **expressions** to evaluate to some result.
 * **Expressions** consist of:
-  * concrete values (string literals, numbers, etc.)
-  * variables (let's avoid a strict definition for now; go with your intuition)
-  * functions (operations of varying degrees of [arity](https://en.wikipedia.org/wiki/Arity))
+    * concrete values (string literals, numbers, etc.)
+    * variables (let's avoid a strict definition for now; go with your intuition)
+    * functions (operations of varying degrees of [arity](https://en.wikipedia.org/wiki/Arity))
 * [Paul Hudak](http://www.cs.yale.edu/homes/hudak/CS201S08/lambda.pdf) presents an alternative formulation if the form of **terms**, which include :
-  * `x` (variables)
-  * `\x. e` (abstractions, think functions: `e` here is shorthand for an expression, not an **unbound term**)
-  * `e1 e2` (applications, an expression applied to another--think function application)
+    * `x` (variables)
+    * `\x. e` (abstractions, think functions: `e` here is shorthand for an expression, not an **unbound term**)
+    * `e1 e2` (applications, an expression applied to another--think function application)
 * **Purity (referential transparency)**: Given an expression and complete specification of its terms, it will always evaluate to the same result.
 
 ## What is a function?
 
 * From math, a **[function](https://en.wikipedia.org/wiki/Function_(mathematics))** maps the [domain](https://en.wikipedia.org/wiki/Domain_of_a_function) of inputs to a [codomain](https://en.wikipedia.org/wiki/Codomain) of outputs.
-  * `f : X -> Y`
+    * `f : X -> Y`
 * Dwelling on this will lead me into a rabbit hole and I'll never get shit done, so read the book and just go with that for now.
 
 ## The structure of lambda terms
@@ -31,39 +31,39 @@ For the sake of my fingers, going to use `\` in place of `λ`.
 * The **body**: an expression with parameters bound to the argument symbols in the **head**.
 * Together, the head and the body form a function known as a **[lambda expression](https://en.wikipedia.org/wiki/Lambda_calculus#Definition)**.
 * Unbound parameters in the body are considered **free**:
-  * `\x.z` : This function takes any argument `x` and returns `z`. `z` is a **free** parameter. Think of them as **constants** (I suspect it's actually more general than that, but it'll do for now). We'll get to the significance of these in [**Beta reduction**](#Beta reduction (β-reduction)) and [**Combinators**](#Combinators).
+    * `\x.z` : This function takes any argument `x` and returns `z`. `z` is a **free** parameter. Think of them as **constants** (I suspect it's actually more general than that, but it'll do for now). We'll get to the significance of these in [**Beta reduction**](#Beta reduction (β-reduction)) and [**Combinators**](#Combinators).
 
 ### Alpha equivalence (α-conversion)
 
 * [alpha equivalence](https://en.wikipedia.org/wiki/Lambda_calculus#Alpha_equivalence) means the choice of symbols in the head does not matter. Provided the corresponding bound parameters in the body match those in the head, you can choose whatever symbols you like:
-  * `\x.x == \y.y == \俺.俺` (α-conversion is not a scam; it's really just easy)
+    * `\x.x == \y.y == \俺.俺` (α-conversion is not a scam; it's really just easy)
 
 ### Beta reduction (β-reduction)
 
 * [β-reduction](https://en.wikipedia.org/wiki/Lambda_calculus#Beta_reduction) reduces an expression to its normal form (an expression which can be reduced no further) through application of functions to arguments. Application follows certain rules:
-  *
+    *
 * Applying function `(\x.t)` to term `s`, then `(\x.t) s -> t[x := s]` (where `t` represents some an expression that may or may not have bound paramaters)
-  * `(\x.x)s -> x[x := s] -> s`
-  * `(\x.z)s -> z[x := s] -> z`
-  * `(\x.xz)s -> x[x := s] -> zs`
+    * `(\x.x)s -> x[x := s] -> s`
+    * `(\x.z)s -> z[x := s] -> z`
+    * `(\x.xz)s -> x[x := s] -> zs`
 * Lambda expression apply to one argument at a time. Multiple arguments may be expressed like `(\xy.t)`, but we can recover the one argument rule through **[currying](https://en.wikipedia.org/wiki/Currying)**.
-  * `(\xy.xy) 1 2 -> x[x := 1] -> (\y.1y) -> y[y := 2] -> 1 2`: This doesn't leave us with a meaningful result...
-  * ...so:
+    * `(\xy.xy) 1 2 -> x[x := 1] -> (\y.1y) -> y[y := 2] -> 1 2`: This doesn't leave us with a meaningful result...
+    * ...so:
     ```
     (\xy.xy)(\z.z) 1  = (\y.(\z.z)y) 1 # x[x := (\z.z)]
-                      = (\z.z) 1       # y[y := 1]
-                      = 1              # z[z := 1]
+                        = (\z.z) 1       # y[y := 1]
+                        = 1              # z[z := 1]
     ```
-  * Chris actually gave us the term `(\z.a)` instead of `(\z.z)`. This would have resulted in a reduction to `a`.
-  * Take `(\xy.xy) (\z.a) 1`
+    * Chris actually gave us the term `(\z.a)` instead of `(\z.z)`. This would have resulted in a reduction to `a`.
+    * Take `(\xy.xy) (\z.a) 1`
     ```
     (\xy.xy) (\z.a) 1 = (\x.(\y.xy)) (\z.a) 1 # curry
-                      = (\y.(\z.a)y) 1        # [x := (\z.a)]
-                      = (\z.a) 1              # [y := 1]
-                      = a                     # [z := 1]
+                        = (\y.(\z.a)y) 1        # [x := (\z.a)]
+                        = (\z.a) 1              # [y := 1]
+                        = a                     # [z := 1]
     ```
 * Some more complicated examples from Chris:
-  * `(\xy.xxy)(\x.xy)(\x.xz)`
+    * `(\xy.xxy)(\x.xy)(\x.xz)`
     ```
     (\xy.xxy)(\x.xy)(\x.xz) = (\x.\y.xxy) (\x.xy) (\x.xz)   # curry
                             = (\y.(\x.xy)(\x.xy)y) (\x.xz)  # [x := (\x.xy)]
@@ -72,7 +72,7 @@ For the sake of my fingers, going to use `\` in place of `λ`.
                             = (\x.xy) y                     # [x := (\x.xz)]
                             = yy                            # [x := y]
     ```
-  * `(\xyz.xz(yz))(\mn.m)(\p.p)`
+    * `(\xyz.xz(yz))(\mn.m)(\p.p)`
     ```
     (\xyz.xz(yz)) (\mn.m) (\p.p)
                     = (\x.\y.\z.xz(yz)) (\m.\n.m) (\p.p)  # curry
@@ -96,17 +96,17 @@ Our ultimate objective is getting an expression into **beta normal form**. That 
 ## Combinators
 
 * **[Combinators](https://en.wikipedia.org/wiki/Combinatory_logic)** are expressions with no free variables.
-  * Identity is a combinator: `(\x.x)`
-  * `\xy.x` is a combinator.
-  * `\y.x` is a **not** a combinator. Has a free variable in `x`.
-  * `\x.xz` is a **not** a combinator. Has a free variable in `z`.
-  * The [Y combinator](https://en.wikipedia.org/wiki/Fixed-point_combinator#Fixed_point_combinators_in_lambda_calculus) is obviously a combinator, and an interesting one:
+    * Identity is a combinator: `(\x.x)`
+    * `\xy.x` is a combinator.
+    * `\y.x` is a **not** a combinator. Has a free variable in `x`.
+    * `\x.xz` is a **not** a combinator. Has a free variable in `z`.
+    * The [Y combinator](https://en.wikipedia.org/wiki/Fixed-point_combinator#Fixed_point_combinators_in_lambda_calculus) is obviously a combinator, and an interesting one:
     ```
     Y g = (\f.(\x.f(x x)) (\x.f(x x))) g  # 1. definition
         = (\x.g(x x)) (\x.g(x x))         # 2. [f := g]. Note this equality
         = g((\x.g(x x)) (\x.g(x x))       # 3. [x := (\x.g(x x))]
         = g (Y g)                         # 4. As per 2:
-                                          #    Y g -> (\x.g(x x)) (\x.g(x x))
+                                            #    Y g -> (\x.g(x x)) (\x.g(x x))
         ...
 
         = g ( ... g (Y g) ...)            # Continued application
@@ -118,8 +118,8 @@ Our ultimate objective is getting an expression into **beta normal form**. That 
 * Some lambda expressions **diverge**; that is they never reach a beta normal form.
 * This has a rich connection to termination in computation. Divergent expressions do not terminate.
 * Some examples:
-  * `(\x.xx)(\x.xx)`: Following the expression rule `[x := (\x.xx)]` simply yields `(\x.xx)(\x.xx)` again.
-  * The [Y combinator](https://en.wikipedia.org/wiki/Fixed-point_combinator#Fixed_point_combinators_in_lambda_calculus) also diverges
+    * `(\x.xx)(\x.xx)`: Following the expression rule `[x := (\x.xx)]` simply yields `(\x.xx)(\x.xx)` again.
+    * The [Y combinator](https://en.wikipedia.org/wiki/Fixed-point_combinator#Fixed_point_combinators_in_lambda_calculus) also diverges
 
 
 ## Additional reading
