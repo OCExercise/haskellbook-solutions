@@ -1,6 +1,40 @@
 # Exercise Solutions
 
-## Reading Syntax
+## Scope
+
+1. Determine if `y` is in scope (globally or locally) for `z`? **Yes**. `y` is in the global scope of `z`
+    ```haskell
+    let x = 5
+    let y = 7
+    let z = x * y
+    ```
+1. Is `h` in scope for `g`? **No**: `h` is not defined prior to `g`, or at all in this case.
+    ```haskell
+    let f = 3
+    let g = 6 * f + h
+    ```
+1. Is `r` in scope for `area`? **No**. `r` is not locally bound to `area`, and its global definition postdates `area`'s.
+    ```haskell
+    area d = pi * (r * r)
+    r = d/2
+    ```
+1. Are `d` and `r` in scope for `area`? **Yes**. `d` is locally bound as an argument and `r` is locally bound to a where clause.
+    ```haskell
+    area d      = pi * (r * r)
+        where r = d / 2
+    ```
+
+## Syntax Errors
+
+Correct the syntax.
+
+1. `++ [1, 2, 3] [4, 5, 6]` should be `(++) [1, 2, 3] [4, 5, 6]`.
+1. `'<3' ++ ' Haskell'` should be `"<3" ++ " Haskell"`.
+1. `concat ["<3", " Haskell"]` is already correct.
+
+## Chapter Exercises
+
+### Reading Syntax
 
 1. Fix or evaluate the following (p. 112-3):
     1. `concact [[1,2,3,],[4,5,6]]` => `[1,2,3,4,5,6]`
@@ -22,15 +56,15 @@
     1. `(take 3 "Julie") ++ (tail "yes")` => `"Jules"`
     1. `concat [tail [1, 2, 3], tail [4, 5, 6], tail [7, 8, 9]]` => `[2,3,5,6,8,9]`
 
-## Building Functions
+### Building Functions
 
 1. Implement functions to perform the following
     1. `"Curry is awesome" => "Curry is awesome!"`
-        ```
+        ```haskell
         appendExclamation s = s ++ "!"
         ```
     1. `"Curry is awesome" => "y"`
-        ```
+        ```haskell
         -- trivial (deliberately missing the point, but permitted
         -- by the question as phrased)
 
@@ -57,7 +91,7 @@
             where m = find (==c) s
         ```
     1. `"Curry is awesome" => "y"`
-        ```
+        ```haskell
         -- trivial (deliberately missing the point, but permitted
         -- by the question as phrased)
         printAwesome s = "awesome"
@@ -76,5 +110,3 @@
             | otherwise = ""
 
         ```
-1. Above implemented in a single sources file demonstrating flexibility here [here](exercises_functions_02.hs)
-1. Doing

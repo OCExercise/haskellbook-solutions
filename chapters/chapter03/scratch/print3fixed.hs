@@ -1,5 +1,8 @@
--- print3broken.hs
+-- print3fixed.hs
 module Main where
+
+greeting :: String
+greeting = "Yarrrrr"
 
 printSecond :: IO ()
 printSecond = do
@@ -9,4 +12,3 @@ main :: IO ()
 main = do
     putStrLn greeting
     printSecond
-    where greeting = "Yarrrrr"
