@@ -29,9 +29,10 @@ module Main where
 main :: IO ()
 main = do
   putStrLn "Hello, world"
-```  
+```
 
 Finally, let's compile [hello.hs](scratch/hello.hs)
+
 ```
 $ ghc --make hello
 
@@ -99,7 +100,7 @@ These are just the highlights. Read 2.2 straight for more, and consult the [docu
     $ hoogle generate       # downloads the internet, go get coffee
     ```
   * From within `ghci`, try `ghci> :! hoogle --info find`. Great if you need to look up something either not in scope or documentation beyond what you can get with `:t <whatevs>` or `:info <stuff>`
-* [Haskeline](https://hackage.haskell.org/package/haskeline). Yet another [readline](https://cnswww.cns.cwru.edu/php/chet/readline/rltop.html). I needed this to [properly map Home and End](https://stackoverflow.com/a/33727632) on a full size Apple keyboard.  
+* [Haskeline](https://hackage.haskell.org/package/haskeline). Yet another [readline](https://cnswww.cns.cwru.edu/php/chet/readline/rltop.html). I needed this to [properly map Home and End](https://stackoverflow.com/a/33727632) on a full size Apple keyboard.
   * Find out the escape characters for keys you'd like to map.
     ```
     $ ghc -e getLine  # press the desired key *and* Enter immediately
