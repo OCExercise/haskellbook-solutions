@@ -4,7 +4,10 @@
 
 * Haskell data declarations consist of **type and data constructors**.
     * `data Foo = Bar | Buzz`
-    * Not sure why **data constructors** are "constructors," but this whole setup smells like enums. Maybe there's a relation.
+    * `data Foo` is a **type constructor**.
+    * `Bar` and `Buzz` are **data constructors**.
+    * `|` joins `Bar` and `Buzz` together as a **[sum type (tagged union)](https://en.wikipedia.org/wiki/Tagged_union)**; basically a logical disjunction (logical OR) of these type constructors (the data structure `Bool` must be either `Bar` or `Buzz`).
+    * This whole setup smells like enums. Maybe there's a relation.
 * Introduced to `deriving Show` in the [Mood Swing exercise](exercises/solutions.md#mood). This is convenient given we haven't learned about [instances]() yet.
 
 ## Numeric types
