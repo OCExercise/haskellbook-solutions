@@ -10,6 +10,7 @@ Errors are your fault. I wasn't even in town that day. But feel free to [bitch a
 1. [Hello, Haskell!](chapters/chapter02/README.md) ([solutions](chapters/chapter02/exercises/README.md))
 1. [Strings](chapters/chapter03/README.md) ([solutions](chapters/chapter03/exercises/README.md))
 1. [Basic datatypes](chapters/chapter04/README.md) ([solutions](chapters/chapter04/exercises/README.md))
+1. [Types](chapters/chapter05/README.md) ([solutions](chapters/chapter05/exercises/README.md))
 
 ## AUTHORS
 
