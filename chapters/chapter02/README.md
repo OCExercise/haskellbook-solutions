@@ -1,5 +1,9 @@
 # Hello, Haskell!
 
+## Chapter Exercises
+
+Solutions availables [here](exercises/README.md).
+
 ## Preparing a Haskell development environment
 
 Every OS is sacred.

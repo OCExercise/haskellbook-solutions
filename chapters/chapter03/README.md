@@ -7,6 +7,10 @@ type String = [Char]    -- Defined in ‘GHC.Base’
 ```
 As you can see, `String` is syntactic sugar for `[Char]`. Actually, it's a bit more than that, but we're not up to [algebraic data types](../chapter11/README.md) yet so this will suffice.
 
+## Chapter Exercises
+
+Solutions availables [here](exercises/README.md).
+
 ## A first look at types
 
 * There's a nifty `:type` command in `ghci`. It works like so:
@@ -267,4 +271,3 @@ As you can see, `String` is syntactic sugar for `[Char]`. Actually, it's a bit m
         ghci> "Papuchon" !! 8
         *** Exception: Prelude.!!: index too large
         ```
-        

@@ -2,7 +2,7 @@
 
 ## Chapter Exercises
 
-Solutions availables [here](exercises/solutions.md).
+Solutions availables [here](exercises/README.md).
 
 ## What is functional programming?
 
@@ -124,11 +124,12 @@ Our ultimate objective is getting an expression into **beta normal form**. That 
 
 ## Additional reading
 
-1. ["Lamba Calculus"](https://en.wikipedia.org/wiki/Lambda_calculus), Wikipedia
-1. ["Combinatory logic"](https://en.wikipedia.org/wiki/Combinatory_logic), Wikipedia
+1. ["Lamba Calculus"](https://en.wikipedia.org/wiki/Lambda_calculus), [Wikipedia](https://en.wikipedia.org)
+1. ["Combinatory logic"](https://en.wikipedia.org/wiki/Combinatory_logic), [Wikipedia](https://en.wikipedia.org)
 1. Hudak, Paul, ["A brief and information introduction to lambda calculus"](http://www.cs.yale.edu/homes/hudak/CS201S08/lambda.pdf). PDF
 1. Rojas, Raul, ["A Tutorial Introduction to the Lambda Calculus"](http://www.inf.fu-berlin.de/lehre/WS03/alpi/lambda.pdf). PDF
 1. Lezama, A. S., ["The Lambda Calculus"](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-820-fundamentals-of-program-analysis-fall-2015/lecture-notes/MIT6_820F15_L02.pdf). Slides
+1. Diehl, Stephen, ["Lambda Calculus"](http://dev.stephendiehl.com/fun/003_lambda_calculus.html), ["Write You A Haskell"](http://dev.stephendiehl.com/fun/index.html)
 
 ## Assorted Problems
 1. ["CMSC330 Spring 2001, Practice Problems 5"](http://www.cs.umd.edu/class/spring2011/cmsc330/prac5-solutions.pdf). PDF

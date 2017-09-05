@@ -1,5 +1,9 @@
 # Basic Datatypes
 
+## Chapter Exercises
+
+Solutions availables [here](exercises/README.md).
+
 ## Data Declarations
 
 * Haskell data declarations consist of **type and data constructors**.
