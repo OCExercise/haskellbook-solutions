@@ -96,7 +96,7 @@ We will explore additional type and data constructor declarations, including [pa
     ```
 * `(->)` is an **infix** operator that associates to the right. **NOTE**: applying the function associates to the left.
 * Let's break down a type signature more comprehensively than we have before. The text uses `fst` and `length` as examples, but let's use something more complicated--say `product`--instead.
-    The `product` function that operates on types that are [instances]() of the [type class](#Type-class-constrained-type-variables) [Foldable]() (we'll get into [instances]() and [type classes]() later) with constituents of type `Num a`. A [list]() is of type [Foldable](), and `product` can operate on any list with constituents (elements) that are numbers.
+    The `product` function that operates on types that are [instances](https://en.wikibooks.org/wiki/Haskell/Classes_and_types#Classes_and_instances) of the [type class](#Type-class-constrained-type-variables) [Foldable](https://en.wikibooks.org/wiki/Haskell/Classes_and_types#Classes_and_instances) (we'll get into **instances** and **type classes** later) with constituents of type `Num a`. A list is of type [Foldable](https://wiki.haskell.org/Foldable), and `product` can operate on any list with constituents (elements) that are numbers.
     ```haskell
     ghci> product 2 [1,2,3]
     6
@@ -110,8 +110,8 @@ We will explore additional type and data constructor declarations, including [pa
     ```
     1. Name of the function. In this case, `product`.
     2. `::` is nn annotation operator, represented infix, which relates a name `foo` (to the left) with its type and type constraints (i.e., `a`, `Int`, `Ord a`). This one is difficult to Hoogle. In fact, I have not been able to find any authoritative documentation on it at all.
-    3. The [instance context]() specifies of type constraints on variables used within the function.
-    4. [`(=>)`](https://wiki.haskell.org/Keywords#.3D.3E), represented infix, relates an [instance context]() to subsequent flow of function application to arguments.
+    3. The [instance context](https://downloads.haskell.org/~ghc/7.0.1/docs/html/users_guide/type-class-extensions.html) specifies of type constraints on variables used within the function.
+    4. [`(=>)`](https://wiki.haskell.org/Keywords#.3D.3E), represented infix, relates an **instance context** to subsequent flow of function application to arguments.
     5. `t a` can be considered a generalization of syntactic sugar we've seen previously; namely, `[a]`. We'll learn more about this sort of syntax later.
     6. The result.
 
@@ -125,7 +125,7 @@ We will explore additional type and data constructor declarations, including [pa
     ```haskell
     (*) :: Num a -> a -> a -> a
     ```
-    `a` is called a **type variable** in this case. As the name suggests, it can take on any data type that [instances]() the **type class** `Num` (more in [instancing]() later).
+    `a` is called a **type variable** in this case. As the name suggests, it can take on any data type that **instances** the **type class** `Num`.
 * We previously noted that the annotation `(::)` is used to signal the type of some named thing. That thing was a **function** in previous examples, but variables literals can also be annotated by type.  For example:
     ```haskell
     ghci> let x_int = 15 :: Int
@@ -164,7 +164,7 @@ We will explore additional type and data constructor declarations, including [pa
 
 #### My own diversion into folding
 
-* The text introduces currying by examining the type `(+)`. Let's take a look instead at the type for `foldl`, a very useful function that applies a **partially applied function** to some `Foldable t` from the left ([left-associative]()). Before we dive into currying, let's discuss the function a bit:
+* The text introduces currying by examining the type `(+)`. Let's take a look instead at the type for `foldl`, a very useful function that applies a **partially applied function** to some `Foldable t` from the left ([left-associative](https://www.haskell.org/tutorial/functions.html)). Before we dive into currying, let's discuss the function a bit:
     ```haskell
     ghci> foldl (*) 1 [1,2,3]
     6
@@ -175,7 +175,7 @@ We will explore additional type and data constructor declarations, including [pa
     ```haskell
             foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
     ```
-* There is a corresponding `foldr` that is [right-associative]():
+* There is a corresponding `foldr` that is [right-associative](https://www.haskell.org/tutorial/functions.html):
     ```haskell
     Let's take a look at it's type signature:
     ```haskell
@@ -197,7 +197,7 @@ We will explore additional type and data constructor declarations, including [pa
     *** Exception: divide by zero
 
     ```
-    The expressions `(\y x -> ...)` are examples of [anonymous functions](). We could easily replace these with operations that adhere to the portion of the signature given by `(b -> a -> b)`.
+    The expressions `(\y x -> ...)` are examples of [anonymous functions](https://wiki.haskell.org/Anonymous_function). We could easily replace these with operations that adhere to the portion of the signature given by `(b -> a -> b)`.
 
 #### Back on track: currying
 
@@ -259,7 +259,10 @@ We will explore additional type and data constructor declarations, including [pa
 1. ["Types"](https://wiki.haskell.org/Type), ["Haskell Wiki"](https://wiki.haskell.org/Type)
 1. ["Type signatures"](https://wiki.haskell.org/Type_signature), ["Haskell Wiki"](https://wiki.haskell.org)
 1. ["Constructor"](https://wiki.haskell.org/Constructor), ["Haskell Wiki"](https://wiki.haskell.org)
-1. Lipovača, Miran, ["Types and Type Classes"](https://http://learnyouahaskell.com/types-and-typeclasses), ["Learn You A Haskell for Great Good!"](https://http://learnyouahaskell.com/)
-1. Diehl, Stephen, ["Type Systems"](http://dev.stephendiehl.com/fun/type_systems.html), ["Write You A Haskell"](http://dev.stephendiehl.com/fun/index.html)
+1. ["Classes and Instances"](https://en.wikibooks.org/wiki/Haskell/Classes_and_types#Classes_and_instances), ["Classes and Types"](https://en.wikibooks.org/wiki/Haskell/Classes_and_types), ["Haskell Wikibook"](https://en.wikibooks.org/wiki/Haskell)
+1. [The GHC Team](https://ghc.haskell.org/trac/ghc/wiki/TeamGHC), [7.6. Class and instances declarations](https://downloads.haskell.org/~ghc/7.0.1/docs/html/users_guide/type-class-extensions.html), [The Glorious Glasgow Haskell Compilation System User's Guide, Version 7.0.1](https://github.com/OCExercise/haskellbook-solutions/blob/master/chapters/chapter05/README.md)
+1. Lipovača, Miran, ["Types and Type Classes"](https://http://learnyouahaskell.com/types-and-typeclasses), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
+1. Lipovača, Miran, ["Making Our Own Types and Typeclasses"](http://learnyouahaskell.com/making-our-own-types-and-typeclasses), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
+1. Diehl, Stephen, ["Type Systems"](http://dev.stephendiehl.com/fun/type_systems.html), [Write You A Haskell](http://dev.stephendiehl.com/fun/index.html)
 
 ## Assorted problems
