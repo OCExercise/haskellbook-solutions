@@ -160,6 +160,7 @@ We will explore additional type and data constructor declarations, including [pa
 
 ### Currying
 
+* **Currying** is a procedure to translate functions with multiple arguments into a sequence of single argument function applications.
 * All functions in Haskell, as in lambda calculus, operate (apply to) one and only one argument. Multiple arguments, as in lambda calculus, may be represented by some syntactic sugar, but at the end of the day any such multiple argument function is simply the successive application of functions to the left against the first of the remaining arguments to the right.
 
 #### My own diversion into folding
@@ -227,8 +228,33 @@ We will explore additional type and data constructor declarations, including [pa
     4. the second argument, which is constrained to type `b` referenced in the first argument,
     5. the third argument, which constrains the constituents of `Foldable` type `t` to type `a`, and finally
     6. the result, which is of type `b`.
+* Recall `(->)` represents the application of a function. The is a right-associative infix operator (`infixr`). The grouping with explicit right-associative parenthesization, and is also useful for examining
+    ```haskell
+            foldl :: Foldable t => (b -> (a -> b)) -> (b -> (t a -> b))
+    ---                             |____________|    |_|   |________|
+    ---                                    |           |         |
+    ---                                    1           2         3
+    ```
+    Let's unpack this.
+    1. The first argument, which is some function supplied to `foldl`, first takes an argument `b`, yielding a function that takes an argument `b`, yielding a a result `b`. This is a curried function in and of itself.
+    2. The second argument, which is the **accumulator**. The function supplied in 1) is applied to it, yielding yet another function.
+    3. The third argument is some variable of type class `Foldable t` which yields the penultimate result of type `b` when the function yielded in 3) is applied to it.
+* The order of evaluation remains left-associative.
 
 #### Partial application
+
+* Functions can be **partially applied** to only a subset of their arguments.
+* Partial application is left-associative--that is, a function is applied only to the leftmost term. Consequently, partial application cannot "skip" arguments to yield new functions.
+* The result of a partially applied function is a new function:
+    ```haskell
+    ghci> f = (+) 1
+    ghci> :t f
+    f :: Num a => a -> a
+    ghci> f 1
+    2
+    ```
+
+
 
 #### Manual currying and uncurrying
 
