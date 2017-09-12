@@ -110,7 +110,7 @@ We will explore additional type and data constructor declarations, including [pa
     ```
     1. Name of the function. In this case, `product`.
     2. `::` is nn annotation operator, represented infix, which relates a name `foo` (to the left) with its type and type constraints (i.e., `a`, `Int`, `Ord a`). This one is difficult to Hoogle. In fact, I have not been able to find any authoritative documentation on it at all.
-    3. The [instance context](https://downloads.haskell.org/~ghc/7.0.1/docs/html/users_guide/type-class-extensions.html) specifies of type constraints on variables used within the function.
+    3. The [instance context](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#class-and-instances-declarations) specifies of type constraints on variables used within the function.
     4. [`(=>)`](https://wiki.haskell.org/Keywords#.3D.3E), represented infix, relates an **instance context** to subsequent flow of function application to arguments.
     5. `t a` can be considered a generalization of syntactic sugar we've seen previously; namely, `[a]`. We'll learn more about this sort of syntax later.
     6. The result.
@@ -228,7 +228,8 @@ We will explore additional type and data constructor declarations, including [pa
     4. the second argument, which is constrained to type `b` referenced in the first argument,
     5. the third argument, which constrains the constituents of `Foldable` type `t` to type `a`, and finally
     6. the result, which is of type `b`.
-* Recall `(->)` represents the application of a function. The is a right-associative infix operator (`infixr`). The grouping with explicit right-associative parenthesization, and is also useful for examining
+* Recall `(->)` represents the application of a function. The is a **right-associative** infix operator ([`infixr`](https://wiki.haskell.org/Keywords#infixr)). Function application, on the other hand, is **left-associative**. We apply a function (and its subsequent **results** [more on this in the next section]) to the left to arguments to the right until we reduce to normal form.
+* The grouping with explicit right-associative parenthesization, and is also useful for examining
     ```haskell
             foldl :: Foldable t => (b -> (a -> b)) -> (b -> (t a -> b))
     ---                             |____________|    |_|   |________|
@@ -239,21 +240,75 @@ We will explore additional type and data constructor declarations, including [pa
     1. The first argument, which is some function supplied to `foldl`, first takes an argument `b`, yielding a function that takes an argument `b`, yielding a a result `b`. This is a curried function in and of itself.
     2. The second argument, which is the **accumulator**. The function supplied in 1) is applied to it, yielding yet another function.
     3. The third argument is some variable of type class `Foldable t` which yields the penultimate result of type `b` when the function yielded in 3) is applied to it.
-* The order of evaluation remains left-associative.
+* I repeat. The order of evaluation remains **left-associative**. Burn it into your brain. Don't let the curry fool you.
 
 #### Partial application
 
-* Functions can be **partially applied** to only a subset of their arguments.
+* **Partial application** of a function refers to the intermediate results obtained via evaluation prior to reaching normal form for an entire expression of interest. Let's deviate from the text again in our examples.
+    ```haskell
+    ghci>
+    ```
 * Partial application is left-associative--that is, a function is applied only to the leftmost term. Consequently, partial application cannot "skip" arguments to yield new functions.
 * The result of a partially applied function is a new function:
-    ```haskell
-    ghci> f = (+) 1
-    ghci> :t f
-    f :: Num a => a -> a
-    ghci> f 1
-    2
-    ```
-
+* Let's try a few examples:
+    * Given a function `f(x,y) = x + y`, yield a function `g(5)` that evaluates to `15`:
+        ```haskell
+        ghci> f x y = x + y
+        ghci> :t f
+        f :: Num a => a -> a -> a
+        ghci> g = f 10
+        ghci> :t g
+        g :: Num a => a -> a
+        ghci> 15 == g 5
+        True
+        ```
+    * Given a function `f(x,y) = x ++ y`, yield a function `g("Prez")` that evaluates to `"hello, Prez"`:
+        ```haskell
+        ghci> g = f "hello, "
+        ghci> :t g
+        g :: [Char] -> [Char]
+        ghci> "hello, Prez" == g "Prez"
+        True
+        ```
+    * Given a function `f(x,y,z) = foldr x y z`, yield a function `g([1..3])` that multiplies all the elements of the list `[1..3]`:
+        ```haskell
+        ghci> f x y = x ++ y
+        ghci> :t f
+        f :: [a] -> [a] -> [a]
+        ghci> f x y z = foldr x y z
+        ghci> :t f
+        f :: Foldable t => (a -> b -> b) -> b -> t a -> b
+        ghci> g = f (*) 1
+        ghci> :t g
+        g :: (Foldable t, Num b) => t b -> b
+        ghci> 6 == g [1..3]
+        True
+        ```
+    * Given a function `f(x,y,z) = foldr x y z`, yield a function `g([1..3])` that multiplies all the elements of the list `[1..3]`:
+        ```haskell
+        ghci> f x y = x ++ y
+        ghci> :t f
+        f :: [a] -> [a] -> [a]
+        ghci> f x y z = foldr x y z
+        ghci> :t f
+        f :: Foldable t => (a -> b -> b) -> b -> t a -> b
+        ghci> g = f (*) 1
+        ghci> :t g
+        g :: (Foldable t, Num b) => t b -> b
+        ghci> 6 == g [1..3]
+        True
+        ```
+    * Given a function `f(x,y,z) = foldr x y z`, yield a function `g([1..3])` that sums all the elements of the list `[1..3]`:
+        ```haskell
+        ghci> f x y z = foldr x y z
+        ghci> :t f
+        f :: Foldable t => (a -> b -> b) -> b -> t a -> b
+        ghci> g = f (+) 0
+        ghci> :t g
+        g :: (Foldable t, Num b) => t b -> b
+        ghci> 6 == g [1..3]
+        True
+        ```
 
 
 #### Manual currying and uncurrying
@@ -286,7 +341,7 @@ We will explore additional type and data constructor declarations, including [pa
 1. ["Type signatures"](https://wiki.haskell.org/Type_signature), ["Haskell Wiki"](https://wiki.haskell.org)
 1. ["Constructor"](https://wiki.haskell.org/Constructor), ["Haskell Wiki"](https://wiki.haskell.org)
 1. ["Classes and Instances"](https://en.wikibooks.org/wiki/Haskell/Classes_and_types#Classes_and_instances), ["Classes and Types"](https://en.wikibooks.org/wiki/Haskell/Classes_and_types), ["Haskell Wikibook"](https://en.wikibooks.org/wiki/Haskell)
-1. [The GHC Team](https://ghc.haskell.org/trac/ghc/wiki/TeamGHC), [7.6. Class and instances declarations](https://downloads.haskell.org/~ghc/7.0.1/docs/html/users_guide/type-class-extensions.html), [The Glorious Glasgow Haskell Compilation System User's Guide, Version 7.0.1](https://github.com/OCExercise/haskellbook-solutions/blob/master/chapters/chapter05/README.md)
+1. [The GHC Team](https://ghc.haskell.org/trac/ghc/wiki/TeamGHC), [7.6. Class and instances declarations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#class-and-instances-declarations), [The Glorious Glasgow Haskell Compilation System User's Guide, Version 8.2.1](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/)
 1. Lipovača, Miran, ["Types and Type Classes"](https://http://learnyouahaskell.com/types-and-typeclasses), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
 1. Lipovača, Miran, ["Making Our Own Types and Typeclasses"](http://learnyouahaskell.com/making-our-own-types-and-typeclasses), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
 1. Diehl, Stephen, ["Type Systems"](http://dev.stephendiehl.com/fun/type_systems.html), [Write You A Haskell](http://dev.stephendiehl.com/fun/index.html)
