@@ -103,7 +103,7 @@ We will explore additional type and data constructor declarations, including [pa
     ```
     Let's look at the type signature and break it down.
     ```haskell
-        product  ::  (Num a, Foldable t)  =>  t  a   -> a
+    product  ::  (Num a, Foldable t)  =>  t  a   -> a
     --  |_____| |__| |_________________| |__| |___| |_____|
     --     |     |            |           |     |      |
     --     1     2            3           4     5      6
@@ -147,15 +147,15 @@ We will explore additional type and data constructor declarations, including [pa
     225.0
 
     ```
-   So far so good, but what happens if you attempt to mix `x_int` and `y_double` in an arithematic expression?
+    So far so good, but what happens if you attempt to mix `x_int` and `y_double` in an arithematic expression?
     ```haskell
     ghci> x_int * y_double
 
     <interactive>:54:9: error:
-        • Couldn't match expected type ‘Int’ with actual type ‘Double’
-        • In the second argument of ‘(*)’, namely ‘y_double’
-          In the expression: x_int * y_double
-          In an equation for ‘it’: it = x_int * y_double
+    • Couldn't match expected type ‘Int’ with actual type ‘Double’
+    • In the second argument of ‘(*)’, namely ‘y_double’
+    In the expression: x_int * y_double
+    In an equation for ‘it’: it = x_int * y_double
     ```
 
 ### Currying
@@ -174,13 +174,13 @@ We will explore additional type and data constructor declarations, including [pa
     ```
     And it's type signature:
     ```haskell
-            foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
+    foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
     ```
 * There is a corresponding `foldr` that is [right-associative](https://www.haskell.org/tutorial/functions.html):
     ```haskell
     Let's take a look at it's type signature:
     ```haskell
-            foldl :: Foldable t => (a -> b -> b) -> b -> t a -> b
+    foldl :: Foldable t => (a -> b -> b) -> b -> t a -> b
     ```
     You may note that the first argument to `foldr`--`(a -> b -> b)`--differs from the `(b -> a -> b)` we saw for `foldl`. You can essentially consider the value represented by `b` as an **accumulator** and `a` the next element in the list.  The order matters, and as is readily apparent when we examine `foldl` and `foldr` with non-commutative operations like subtraction, division and integer division:
     ```haskell
@@ -204,7 +204,7 @@ We will explore additional type and data constructor declarations, including [pa
 
 * Again let's look at `foldl`.  As practically applied, it appears to be a three argument function:
     ```haskell
-        foldl (\y x -> y - x)  0  [1,2,3,4,5]
+    foldl (\y x -> y - x)  0  [1,2,3,4,5]
     --- |___| |_____________| |_| |_________|
     ---   |          |         |        |
     ---   1          2         3        4
@@ -216,7 +216,7 @@ We will explore additional type and data constructor declarations, including [pa
     4. the third argument, which is the list which we want to fold.
 * Let's re-examine its type signature:
     ```haskell
-            foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
+    foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
     ---     |___|   |________|     |___________|  |___| |____| |_|
     ---       |          |               |          |     |     |
     ---       1          2               3          4     5     6
@@ -229,9 +229,9 @@ We will explore additional type and data constructor declarations, including [pa
     5. the third argument, which constrains the constituents of `Foldable` type `t` to type `a`, and finally
     6. the result, which is of type `b`.
 * Recall `(->)` represents the application of a function. The is a **right-associative** infix operator ([`infixr`](https://wiki.haskell.org/Keywords#infixr)). Function application, on the other hand, is **left-associative**. We apply a function (and its subsequent **results** [more on this in the next section]) to the left to arguments to the right until we reduce to normal form.
-* The grouping with explicit right-associative parenthesization, and is also useful for examining
+* The grouping with explicit right-associative parenthesization:
     ```haskell
-            foldl :: Foldable t => (b -> (a -> b)) -> (b -> (t a -> b))
+    foldl :: Foldable t => (b -> (a -> b)) -> (b -> (t a -> b))
     ---                             |____________|    |_|   |________|
     ---                                    |           |         |
     ---                                    1           2         3
@@ -309,22 +309,199 @@ We will explore additional type and data constructor declarations, including [pa
         ghci> 6 == g [1..3]
         True
         ```
-
-
 #### Manual currying and uncurrying
+
+* Tuples can be used to manually represent uncurried functions. Here's a simple example of adding two variables represented in curried and uncurried forms.
+    ```haskell
+    ghci> f x y = x + y
+    ghci> g (x,y) = x + y
+    ghci> :t f
+    f :: Num a => a -> a -> a
+    ghci> :t g
+    g :: Num a => (a, a) -> a
+    ghci> g (1,2) == f 1 2
+    True
+    ```
+
+#### Currying and uncurrying existing functions
+
+* Tuples are also useful for uncurrying existing functions. Let's curry `fst`.
+    ```haskell
+    ghci> curry f x y = f (x, y)
+    ghci> :t curry
+    curry :: ((t1, t) -> t2) -> t1 -> t -> t2
+    ghci> :t fst
+    fst :: (a, b) -> a
+    ghci> :t curry fst
+    curry fst :: t2 -> b -> t2
+    ghci> curry fst 1 2 == fst (1,2)
+    True
+    ```
+* Now let's uncurry `(+)`:
+    ```haskell
+    ghci> uncurry f (x,y) = f x y
+    ghci> :t uncurry
+    uncurry :: (t2 -> t1 -> t) -> (t2, t1) -> t
+    ghci> :t (+)
+    (+) :: Num a => a -> a -> a
+    ghci> :t uncurry (+)
+    uncurry (+) :: Num t => (t, t) -> t
+    ghci> uncurry (+) (1,2) == (+) 1 2
+    True
+    ```
 
 #### Sectioning
 
+* Infix operators can be partially applied. Key thing to remember here is some operators are commutative (`(+2) x == (2+) x` for any `x :: Num a`). Some are not (`(^2) x /= (^2)` for any `x >= 0` ). **NOTE**: `(^)` is non-negative integer exponentiation. Consider `(^^)` for full integer exponentation, or `(**)` for exponentiation over the reals.
+* In any event, let's try some examples:
+    ```haskell
+    ghci> map (^2) [1..] /= map (2^) [0..]
+    True
+    ghci> (/2) 17 /= (2/) 17
+    True
+
+    -- This will go on further. Haskell supports infinite lists
+    ghci> map (+2) [0..] == map (2+) [0..]
+    ^CInterrupted.
+
+    -- This evaluations almost immediately
+    ghci> map (^2) [1..] /= map (2^) [0..]
+    True
+
+    -- Let's partially apply infixed map
+    ghci> f = (`map` [1..10])
+    ghci> :t f
+    f :: (Num a, Enum a) => (a -> b) -> [b]
+    ghci> f (+2)
+    [3,4,5,6,7,8,9,10,11,12]
+    ```
+* **QUESTION**: Infix operations appear to be binary. Is this actually true? What does it mean to be infix on three or more operands?
+
 ### Polymorphism
+
+* **Polymorphism** is te formulation of single expressions that can operate over multiple types adhering to certain conditions.
+* Types come in three flavors:
+    1. **concrete**: Restricted to a single form (i.e., `Int`, `Double`, `[Char]`)
+    2. **polymorphically constrined**: Types are *constrained* by a [type class](../chapter06/README.md) (i.e., `Num a`, `Foldable t`). These class of types form the basis for **ad hoc polymorphism** in Haskell.
+    3. **parametrically polymorphic**: Types that are unconstrained in their **type variables** (i.e., `(a,b)` or [a]).
+* By convention, in Haskell **type variables** are lower-case and represented with single alpbabetic characters (occasionally, two characters--one alphabetic, one numeric \[i.e., `t0`\])
+* **Type class constraints** and **concrete types** are always represented with initial capitalization.
+* Let's consider some examples:
+    * `id :: a -> a` is parametrically polymorphic. It is unconstrained in its type, and its operation, which is simply to return what is passed as an argument, requires no constraint to be apply to variables of any conceivable type.
+    * `fst :: (a, b) -> a` is also parametrically polymorphic.
+    * `map :: (a -> b) -> [a] -> [b]` is parametrically polymorphic.
+    * `foldr ::  Foldable t => (a -> b -> b) -> b -> t a -> b` is polymorophically constrained in type class `Foldable`.
+    * `foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b` is similarly constrained polymorphically.
+* I don't know of any base functions in Haskell that are concrete. I get the feeling that it's best practice to at least shoot for constrained polymorphism wherever possible. After all, writing once is better than writing a lot. So here's a contrived example:
+    ```haskell
+    ghci> let intPlus :: Int -> Int -> Int; intPlus x y = x + y
+    ghci> :t intPlus
+    intPlus :: Int -> Int -> Int
+    ghci> 2 `intPlus` 2
+    4
+    ghci> :t (2 `intPlus` 2)
+    (2 `intPlus` 2) :: Int
+    ```
 
 #### Polymorphic constants
 
+* Literals can be polymorphic:
+    * `1` is **maximally polymorphic** (I smell [covariance/contravariance](https://www.fpcomplete.com/blog/2016/11/covariance-contravariance) coming on) to `Num t => t`
+    * `3.14159` is maximally polymorphic to `Fractional t => t` (`pi`, by the way, is maximally polymorphic to `Floating a => a`)
+* The appropriate implementation of an operation on say, `1` and `3.14159` is selected by inferring the least maximally polymorphic argument and constraining all applicable terms to that type within the expression.
+    ```haskell
+    ghci> :t (-1 + 3.14159)
+    (-1 + 3.14159) :: Fractional a => a
+    ghci> :t ((-1::Double) + 3.14159)
+    ((-1::Double) + 3.14159) :: Double
+    ghci> :t ((-1::Double) + 3.14159::Float)
+
+    <interactive>:1:2: error:
+        • Couldn't match expected type ‘Float’ with actual type ‘Double’
+        • In the expression: ((- 1 :: Double) + 3.14159 :: Float)
+    ghci> :t ((-1::Int) + 3.14159::Float)
+
+    <interactive>:1:2: error:
+        • Couldn't match expected type ‘Float’ with actual type ‘Int’
+        • In the expression: ((- 1 :: Int) + 3.14159 :: Float)
+    ```
+
+
 #### Working around constraints
+
+* How do we employ the output of `length :: Foldable t => t a -> Int` as an operand in division (`(/) :: Fractional a => a -> a -> a`)? We employ a function that maximizes the polymorphicity of `Int` to `Num a => a`. This function is called `fromIntegral`.
+    ```haskell
+    ghci> :t fromIntegral
+    fromIntegral :: (Num b, Integral a) => a -> b
+    ghci> y = (1 / (fromIntegral $ length [0..10]))
+    ghci> y
+    9.090909090909091e-2
+    ghci> :t y
+    y :: Fractional a => a
+
+    ```
+* There are [a whole bunch of these](http://hackage.haskell.org/package/base-4.10.0.0/docs/Prelude.html#v:fromInteger) operations that both lift numeric types up the polymorphic chain or back down the pipe. The function `fromInteger` itself is a [composition]()https://wiki.haskell.org/Function_composition) of two functions: [`fromInteger`](http://hackage.haskell.org/package/base-4.10.0.0/docs/Prelude.html#v:fromInteger) and [`toInteger`](http://hackage.haskell.org/package/base-4.10.0.0/docs/Prelude.html#v:toInteger) (see [source]()http://hackage.haskell.org/package/base-4.10.0.0/docs/src/GHC.Real.html#fromIntegral).
 
 ### Type inference
 
+* Haskell employes [Hindley-Milner](https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system) type inference to save us a lot of work. You've already seen a lot of this at work, and by now should have noticed we have not had to frequently (or at all at this point) supply type annotations.
+    ```haskell
+    ghci> f x y = x + y
+    ghci> :t f
+    f :: Num a => a -> a -> a
+    ```
+* GHC will infer the **maximally polymorphic** type(s) applicable to an operation's operands.
+    ```
+    ghci> f x y = x / y
+    ghci> :t f
+    f :: Fractional a => a -> a -> a
+
+    ghci> g = f 1 (2.0::Double)
+    ghci> :t g
+    g :: Double
+
+    ghci> h z = f (1.0::Double) z
+    ghci> :t h
+    h :: Double -> Double
+
+    ghci> phi x = f (1.0::Fractional a => a) x
+    ghci> :t phi
+    phi :: Fractional a => a -> a
+    ghci> phi 1
+    1.0
+    ghci> phi 55
+    1.818181818181818e-2
+    ```
+* The operation of [Hindley-Milner](https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system) is beyond the scope of this book and these notes, so won't dwell on this.
+
 ### Asserting types for declarations
 
+* Inference is work for both compiler and programmer. We constrain types to aid man and machine.
+* We can constrain types via:
+    1. **type signature**:
+        ```haskell
+        ghci> let triple :: Int -> Int; triple x = 3 * x
+        ghci> :t triple
+        triple :: Int -> Int
+        ```
+    1. **type annotation**:
+        ```haskell
+        ghci> triple' x = (3::Int) * x
+        ghci> :t triple'
+        triple' :: Int -> Int
+
+        ```
+* GHC's inference engine can help us avoid mistakes in declaring and annotating types:
+    ```haskell
+    ghci> let f :: Int -> Int -> Int; f x y = x + y + "test"
+
+    <interactive>:47:45: error:
+        • Couldn't match expected type ‘Int’ with actual type ‘[Char]’
+        • In the second argument of ‘(+)’, namely ‘"test"’
+          In the expression: x + y + "test"
+          In an equation for ‘f’: f x y = x + y + "test"
+
+    ```
 
 ## Additional reading
 
