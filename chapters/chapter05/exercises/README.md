@@ -146,14 +146,14 @@ Parametric polymorphism is essentially an exercise in passing stuff around.
 You are the compiler. Infer, bitch.
 
 1. Given `(++) :: [a] -> [a] -> [a]`, infer the signature of `myConcat x = x ++ " yo"`
-    * Answer: `[Char] -> [Char]`
+    * **Answer**: `[Char] -> [Char]`
 1. Given `(*) :: Num a => a -> a -> a`, infer the signature of `myMult x = (x / 3) * 5`
-    * Answer: `Fractional a => a -> a`
-    * Note: This is a trick question. We also need to know the signature of `(/)`, which is `Fractional a => a -> a -> a`. This is the polymorhpically more restrictive operation, hence the result.
+    * **Answer**: `Fractional a => a -> a`
+    * **Notes**: This is a trick question. We also need to know the signature of `(/)`, which is `Fractional a => a -> a -> a`. This is the polymorhpically more restrictive operation, hence the result.
 1. Given `(>) :: Ord a => a -> a -> Bool`, infer the signature of `myCom x = x > (length [1..10])`
-    * Answer: `Int -> Bool`
+    * **Answer**: `Int -> Bool`
 1. Given `(<) :: Ord a => a -> a -> Bool`, infer the signature of `myAlph x = x < 'z'`
-    * Answer: `Char -> Bool`
+    * **Answer**: `Char -> Bool`
 
 ## Chapter Exercises
 
@@ -172,9 +172,67 @@ You are the compiler. Infer, bitch.
 
 As suggested in the text, we will use the `{-# LANGUAGE NoMonomorphismRestriction #-}` [pragma](http://downloads.haskell.org/~ghc/6.8.1/docs/html/users_guide/pragmas.html) to ensure top level declarations take maximally polymorphic types.
 
+1. Determine the type of the following:
+    1. `(* 9) 6` -> `Num a => a`
+    1. `head [(0,"doge"),(1,"kitteh")]` -> `Num a => (a,b)`
+    1. `head [(0 :: Integer ,"doge"),(1,"kitteh")]` -> `(Integer,[Char])`
+    1. `if False then True else False` -> `Bool`
+    1. `length [1, 2, 3, 4, 5]` -> `Int`
+    1. `(length [1, 2, 3, 4]) > (length "TACOCAT")` -> `Bool`
+1. Given
+    ```haskell
+    x = 5
+    y = x + 5
+    w = y * 10
+    ```
+    What is the type of `w`?
+        * **Answer**: `Num a => a`
+        * **Notes**: `(+)` and `(*)` are maximally polymorphic to `Num a => a -> a -> a`
+1. Given
+    ```haskell
+    x = 5
+    y = x + 5
+    z y = y * 10
+    ```
+    What is the type of `z`?
+        * **Answer**: `Num a => a -> a`
+        * **Notes**: Same deal with `(+)` and `(*)`, however this time `z` is supplied an argument
+1. Given
+    ```haskell
+    x = 5
+    y = x + 5
+    f = 4 / y
+    ```
+    What is the type of `z`?
+        * **Answer**: `Fractional a => a`
+        * **Notes**: `(/)` is polymorphically more restrictive than `(+)`, and since its operands are limited to `Fractional a => a`, all dependant functions must also take operands no more maximally typed than `Fractional a => a`
+1. Given
+    ```Haskell
+    x = "Julie"
+    y = " <3 "
+    z = "Haskell"
+    f = x ++ y ++ z
+    ```
+    What is the type of `f`?
+        * **Answer**: `[Char]`
 
 
 ### Does it compile?
+
+Answer yes if the following compile, or no and a fix if it doesn't.
+
+1. No.
+    ```haskell
+    ghci> bigNum = (^) 5 $ 10
+    ghci> wahoo = bigNum $ 10
+
+    <interactive>:22:1: error:
+        • Non type-variable argument in the constraint: Num (t -> t1)
+          (Use FlexibleContexts to permit this)
+        • When checking the inferred type
+            wahoo :: forall t t1. (Num (t -> t1), Num t) => t1
+
+    ```
 
 ### Type variable or specific type constructor?
 
