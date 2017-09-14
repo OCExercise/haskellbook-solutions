@@ -172,6 +172,13 @@ You are the compiler. Infer, bitch.
 
 As suggested in the text, we will use the `{-# LANGUAGE NoMonomorphismRestriction #-}` [pragma](http://downloads.haskell.org/~ghc/6.8.1/docs/html/users_guide/pragmas.html) to ensure top level declarations take maximally polymorphic types.
 
+Files:
+* [determine_the_type_p1.hs](determine_the_type_p1.hs)
+* [determine_the_type_p2.hs](determine_the_type_p2.hs)
+* [determine_the_type_p3.hs](determine_the_type_p3.hs)
+* [determine_the_type_p4.hs](determine_the_type_p4.hs)
+* [determine_the_type_p5.hs](determine_the_type_p5.hs)
+
 1. Determine the type of the following:
     1. `(* 9) 6` -> `Num a => a`
     1. `head [(0,"doge"),(1,"kitteh")]` -> `Num a => (a,b)`
@@ -233,6 +240,29 @@ Answer yes if the following compile, or no and a fix if it doesn't.
             wahoo :: forall t t1. (Num (t -> t1), Num t) => t1
 
     ```
+1. Yes
+1. No.
+    ```haskell
+    ghci> a = (+)
+    ghci> b = 5
+    ghci> c = b 10
+
+    <interactive>:15:1: error:
+        • Non type-variable argument in the constraint: Num (t -> t1)
+          (Use FlexibleContexts to permit this)
+        • When checking the inferred type
+            c :: forall t t1. (Num (t -> t1), Num t) => t1
+
+    ```
+    Since `b` is type `Num t => t`, which is simply a value, we cannot apply it to `10` as we would a function. Instead, `a` makes a better candidate:
+        ```haskell
+        ghci> a = (+)
+        ghci> b = 5
+        ghci> c = a 10
+        ghci> d = c 200
+
+        ```
+1. No. `b` is not in scope when `a` is declared, and `c` is never in scope.
 
 ### Type variable or specific type constructor?
 
