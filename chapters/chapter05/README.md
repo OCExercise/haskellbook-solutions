@@ -103,13 +103,13 @@ We will explore additional type and data constructor declarations, including [pa
     ```
     Let's look at the type signature and break it down.
     ```haskell
-    product  ::  (Num a, Foldable t)  =>  t  a   -> a
+        product  ::  (Num a, Foldable t)  =>  t  a   -> a
     --  |_____| |__| |_________________| |__| |___| |_____|
     --     |     |            |           |     |      |
     --     1     2            3           4     5      6
     ```
     1. Name of the function. In this case, `product`.
-    2. `::` is nn annotation operator, represented infix, which relates a name `foo` (to the left) with its type and type constraints (i.e., `a`, `Int`, `Ord a`). This one is difficult to Hoogle. In fact, I have not been able to find any authoritative documentation on it at all.
+    2. `::` is an annotation operator, represented infix, which relates a name `foo` (to the left) with its type and type constraints (i.e., `a`, `Int`, `Ord a`). This one is difficult to Hoogle. In fact, I have not been able to find any authoritative documentation on it at all.
     3. The [instance context](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#class-and-instances-declarations) specifies of type constraints on variables used within the function.
     4. [`(=>)`](https://wiki.haskell.org/Keywords#.3D.3E), represented infix, relates an **instance context** to subsequent flow of function application to arguments.
     5. `t a` can be considered a generalization of syntactic sugar we've seen previously; namely, `[a]`. We'll learn more about this sort of syntax later.

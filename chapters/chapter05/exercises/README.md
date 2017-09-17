@@ -266,6 +266,52 @@ Answer yes if the following compile, or no and a fix if it doesn't.
 
 ### Type variable or specific type constructor?
 
+Determine if the elements in the following type signatures are:
+    1. Concretete
+    2. Polymorphically constrained
+    3. Parametrically polymorphic (unconstrained).
+
+1. `f :: Num a => a -> b -> Int -> Int`
+    ```haskell
+         f :: Num a => a -> b -> Int -> Int
+    --                |_|  |_|   |_|    |_|
+    --                 |    |     |      |
+    --                 1    2     3      4
+    ```
+    1. `a` is polymorphically constrained by the type class `Num`.
+    1. `b` is parametrically polymorphic.
+    1.  `Int` is concrete.
+    1.  Same as above.
+1. `f :: zed -> Zed -> Zed`
+    ```haskell
+         f :: zed -> Zed -> Zed
+    --        |_|    |_|    |_|
+    --         |      |      |
+    --         1      2      3
+    ```
+    1. `zed` is parametrically polymorphic.
+    1. `Zed` is concerete.
+    1.  Same as above.
+1. `f :: Enum b => a -> b -> c`
+    ```haskell
+         f :: Enum a => a -> b -> c
+    --                 |_|  |_|  |_|
+    --                  |    |    |
+    --                  1    2    3
+    ```
+    1. `a` is polymorphically constrained by the type class `Enum`.
+    1. `b` is parametrically polymorphic.
+    1.  `c` is parametrically polymorphic.
+1. `f :: f -> g -> c`
+    ```haskell
+         f :: f -> g -> C
+    --       |_|  |_|  |_|
+    --        |    |    |
+    --        1    2    3
+    ```
+    1. `f` is parametrically polymorphic.
+    1. `g` is parametrically polymorphic.
+    1. `C` is concrete
 ### Write a type signature
 
 ### Give a type, write the function
