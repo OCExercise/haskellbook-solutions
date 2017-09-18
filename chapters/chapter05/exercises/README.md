@@ -312,10 +312,129 @@ Determine if the elements in the following type signatures are:
     1. `f` is parametrically polymorphic.
     1. `g` is parametrically polymorphic.
     1. `C` is concrete
+
 ### Write a type signature
+
+Infer the type signature for the following expressions
+
+1. `functionN (x:_) = x`
+    * `functionN :: [a] -> a`
+1. `functionC x y = if (x > y) then True else False`
+    * `functionC :: Ord a => a -> a -> Bool`
+1. `functionS (x, y) = y`
+    * `functionS :: (a, b) -> b`
 
 ### Give a type, write the function
 
+Infer the function given the type signature
+
+1. `i :: a -> a`
+    * `i x = x`
+    * This is the identity function. It is the only function that satisfies this signature ([proof](https://stackoverflow.com/a/12230918/1375586)).
+1. `c :: a -> b -> a`
+    * `c x y = x`
+1. `c'' :: b -> a -> b`
+    * `c x y = x`
+    * Under alpha equivalence, `c :: a -> b -> a` is the same as `c'' :: b -> a -> b`
+1. `c' :: a -> b -> b`
+    * `c x y = y`
+1. `r :: [a] -> [a]`
+    * Trivial: `r x = x`, an identity function restricted to lists
+    * `f x = take 1 x`
+    * `f x = reverse x`
+1. `co :: (b -> c) -> (a -> b) -> a -> c`
+    * `co g f x = g (f x)`, which can also be written
+    * `co g f x = g $ f x`, and
+    * `co g f x = (g . f) x`, and
+    * `co g f = (g . f)`
+    * The latter two are examples of [function composition](https://wiki.haskell.org/Function_composition), and the last one specifically in [point free notation](https://wiki.haskell.org/Pointfree)
+1. `a :: (a -> c) -> a -> a`
+    * `a f x = x`
+    * The function `(a -> c)` is necessarily discarded as all arguments are parametrically polymorphic and we do not have an argument in `c` and the result is in `a`.
+1. `a' :: (a -> b) -> a -> b`
+    * `a f x = f x`, or
+    * `a f = f` ([point free](https://wiki.haskell.org/Pointfree))
+
 ### Fix it
 
+Objective is to fix some broken sources. I've done so and within their own source files.
+
+1. Fix the following:
+    ```haskell
+    module sing where
+    fstString :: [Char] ++ [Char]
+    fstString x = x ++ " in the rain"
+
+    sndString :: [Char] -> Char
+    sndString x = x ++ " over the rainbow"
+
+    sing = if (x > y) then fstString x or sndString y
+    where x = "Singin"
+       x = "Somewhere"
+    ```
+    * See [sing.hs](sing.hs) for the solution
+1. Now that we've fixed above code, modify it so that it can print the other string. I've elected to do so in a fashion that will allow users of the `sing` function (renamed `sing'` to reinforce the difference in the reader's mind) to be switchable. See [sing_switchable.hs](sing_switchable.hs) for the solution
+1. Fix the following:
+    ```haskell
+    -- arith3broken.hs
+    module Arith3Broken where
+
+    main :: IO () Main = do
+        print 1 + 2
+        putStrLn 10
+        print (negate -1) print ((+) 0 blah) where blah = negate 1
+    ```
+    * See [arith3broken.hs](arith3broken.hs). Note, I changed the module name from `Arith3Broken` to `Main` so you can compile with `ghc` and run from the command line.
+
+
 ### Type-Kwon-Do
+
+1. Supply the implementation for `???` in the following:
+    ```haskell
+    f :: Int -> String; f = undefined
+    g :: String -> Char; g = undefined
+    h :: Int -> Char; h = ???
+    ```
+    Solutions include:
+        * `h x = g (f x)`
+        * `h x = g $ f x`
+        * `h x = (g . f) x`
+        * `h = g . f`
+1. Supply the implementation for `???` in the following:
+    ```haskell
+    data A
+    data B
+    data C
+    q :: A -> B; q = undefined
+    w :: B -> C;  w = undefined
+    e :: A -> C; e = ???
+
+    ```
+    Solutions include:
+        * `e x = w (q x)`
+        * `e x = w $ q x`
+        * `e x = (w . q) x`
+        * `e = w . q`
+1. Supply the implementation for `???` in the following:
+    ```haskell
+    data X
+    data Y
+    data Z
+    xz :: X -> Z; xz = undefined
+    yz :: Y -> Z; yz = undefined
+    xform :: (X, Y) -> (Z, Z); xform = ???
+    ```
+    Solutions include
+        * `xform (x,y) = ( xz x, yz y )`
+        * `xform (x,y) = ( xz x, xz x )`
+        * `xform (x,y) = ( yz y, yz y )`
+1. Supply the implementation for `???` in the following:
+    ```haskell
+    munge :: (x -> y)
+        -> (y -> (w, z))
+        -> x
+        -> w
+    munge = ???
+
+    ```
+    * `munge f g x = (g . f) x`
