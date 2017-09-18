@@ -1,5 +1,7 @@
 # Exercise Solutions
 
+Review the [notes here](../README.md).
+
 ## Mood Swing
 
 Correct the following:

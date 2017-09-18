@@ -1,5 +1,7 @@
 # Exercise Solutions
 
+Review the [notes here](../README.md).
+
 For the sake of my fingers, I'll be using `\` in place of `λ`.
 
 ## Intermission

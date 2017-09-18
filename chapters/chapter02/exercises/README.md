@@ -1,5 +1,7 @@
 # Exercise Solutions
 
+Review the [notes here](../README.md).
+
 ## Parentheses and Associations
 
 1. Evaluating the following two expressions yields different results as the parentheses surrounding the addition operation ensure it takes precedence over multiplication.

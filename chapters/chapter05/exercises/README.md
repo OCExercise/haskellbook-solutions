@@ -1,5 +1,7 @@
 # Exercise Solutions
 
+Review the [notes here](../README.md).
+
 ## Type matching
 
 Match the given operations to their type signatures:

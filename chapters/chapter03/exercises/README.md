@@ -1,5 +1,7 @@
 # Exercise Solutions
 
+Review the [notes here](../README.md).
+
 ## Scope
 
 1. Determine if `y` is in scope (globally or locally) for `z`? **Yes**. `y` is in the global scope of `z`
