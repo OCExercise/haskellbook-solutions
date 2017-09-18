@@ -1,8 +1,9 @@
 # Basic Datatypes
 
-## Chapter Exercises
+## Directions
 
-Solutions availables [here](exercises/README.md).
+* [Table of Contents](../../README.md)
+* Solutions availables [here](exercises/README.md).
 
 ## Data Declarations
 

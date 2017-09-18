@@ -1,5 +1,12 @@
 # Strings
 
+## Directions
+
+* [Table of Contents](../../README.md)
+* Solutions are available [here](exercises/README.md)
+
+## Overview
+
 This chapter is a sneaky introduction to **lists** , **types** and even the `main` loop. A `String` is a list of `Char`. Prove it to yourself in `ghci`:
 ```haskell
 ghci> :info String

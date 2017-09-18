@@ -1,5 +1,12 @@
 # Types
 
+## Directions
+
+* [Table of Contents](../../README.md)
+* Solutions availables [here](exercises/README.md).
+
+## Overview
+
 Let's learn more about Haskell's built in datatypes and also how to create our own. We'll go beyond the simple constructions of the last chapter, exploring:
 
 * type signatures

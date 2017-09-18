@@ -1,5 +1,13 @@
 # Haskell platform and Stack installation for Ubuntu
 
+## Directions
+
+* [Table of Contents](../../README.md)
+* Review the [notes here](README.md).
+* Solutions available [here](exercises/README.md)
+
+## Instructions
+
 This is pretty straight forward. Open a terminal and run the following. Open a terminal
 
 ```

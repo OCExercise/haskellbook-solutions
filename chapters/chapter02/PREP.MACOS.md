@@ -1,5 +1,11 @@
 # Haskell platform and Stack installation for MacOS
 
+## Directions
+
+* [Table of Contents](../../README.md)
+* Review the [notes here](README.md).
+* Solutions available [here](exercises/README.md)
+
 ## Prerequisites
 
 * [homebrew](https://brew.sh/)

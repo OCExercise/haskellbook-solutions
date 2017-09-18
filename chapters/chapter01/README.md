@@ -2,7 +2,10 @@
 
 ## Chapter Exercises
 
-Solutions availables [here](exercises/README.md).
+## Directions
+
+* [Table of Contents](../../README.md)
+* Solutions availables [here](exercises/README.md).
 
 ## What is functional programming?
 

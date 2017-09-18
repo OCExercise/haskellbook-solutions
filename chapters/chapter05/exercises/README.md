@@ -1,6 +1,10 @@
 # Exercise Solutions
 
-Review the [notes here](../README.md).
+## Directions
+
+* [Table of Contents](../../../README.md)
+* Review the [notes here](../README.md).
+
 
 ## Type matching
 
