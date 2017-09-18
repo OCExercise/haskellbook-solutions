@@ -1,7 +1,5 @@
 # Hello, Haskell!
 
-## Chapter Exercises
-
 ## Directions
 
 * [Table of Contents](../../README.md)

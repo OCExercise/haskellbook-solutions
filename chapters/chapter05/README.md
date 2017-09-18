@@ -17,11 +17,6 @@ Let's learn more about Haskell's built in datatypes and also how to create our o
 
 We're going to delve deeper into several symbols in this chapter. Googling for symbols sucks. [Hoogling](https://www.haskell.org/hoogle/), on the other hand, is nice. Try Hoogling [`(->)`](https://www.haskell.org/hoogle/?hoogle=%28-%3E%29) for example.
 
-## Chapter Exercises
-
-Solutions availables [here](exercises/README.md).
-
-
 ## Recap: Type and Data constructors
 
 ```haskell
@@ -451,7 +446,7 @@ We will explore additional type and data constructor declarations, including [pa
 
 ### Type inference
 
-* Haskell employes [Hindley-Milner](https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system) type inference to save us a lot of work. You've already seen a lot of this at work, and by now should have noticed we have not had to frequently (or at all at this point) supply type annotations.
+* Haskell employs [Hindley-Milner](https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system) type inference to save us a lot of work. You've already seen a lot of this at work, and by now should have noticed we have not had to frequently (or at all at this point) supply type annotations.
     ```haskell
     ghci> f x y = x + y
     ghci> :t f

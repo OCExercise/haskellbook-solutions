@@ -1,7 +1,5 @@
 # All you need is Lambda
 
-## Chapter Exercises
-
 ## Directions
 
 * [Table of Contents](../../README.md)
