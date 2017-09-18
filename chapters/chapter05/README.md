@@ -516,10 +516,10 @@ We will explore additional type and data constructor declarations, including [pa
 
 ##### Haskell
 
-1. ["Types"](https://wiki.haskell.org/Type), ["Haskell Wiki"](https://wiki.haskell.org/Type)
-1. ["Type signatures"](https://wiki.haskell.org/Type_signature), ["Haskell Wiki"](https://wiki.haskell.org)
-1. ["Constructor"](https://wiki.haskell.org/Constructor), ["Haskell Wiki"](https://wiki.haskell.org)
-1. ["Classes and Instances"](https://en.wikibooks.org/wiki/Haskell/Classes_and_types#Classes_and_instances), ["Classes and Types"](https://en.wikibooks.org/wiki/Haskell/Classes_and_types), ["Haskell Wikibook"](https://en.wikibooks.org/wiki/Haskell)
+1. ["Types"](https://wiki.haskell.org/Type), [Haskell Wiki](https://wiki.haskell.org/Type)
+1. ["Type signatures"](https://wiki.haskell.org/Type_signature), [Haskell Wiki](https://wiki.haskell.org)
+1. ["Constructor"](https://wiki.haskell.org/Constructor), [Haskell Wiki](https://wiki.haskell.org)
+1. ["Classes and Instances"](https://en.wikibooks.org/wiki/Haskell/Classes_and_types#Classes_and_instances), ["Classes and Types"](https://en.wikibooks.org/wiki/Haskell/Classes_and_types), [Haskell Wikibook](https://en.wikibooks.org/wiki/Haskell)
 1. [The GHC Team](https://ghc.haskell.org/trac/ghc/wiki/TeamGHC), [7.6. Class and instances declarations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#class-and-instances-declarations), [The Glorious Glasgow Haskell Compilation System User's Guide, Version 8.2.1](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/)
 1. Lipovača, Miran, ["Types and Type Classes"](https://http://learnyouahaskell.com/types-and-typeclasses), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
 1. Lipovača, Miran, ["Making Our Own Types and Typeclasses"](http://learnyouahaskell.com/making-our-own-types-and-typeclasses), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
