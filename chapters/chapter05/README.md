@@ -211,7 +211,7 @@ We will explore additional type and data constructor declarations, including [pa
 
 * Again let's look at `foldl`.  As practically applied, it appears to be a three argument function:
     ```haskell
-    foldl (\y x -> y - x)  0  [1,2,3,4,5]
+        foldl (\y x -> y - x)  0  [1,2,3,4,5]
     --- |___| |_____________| |_| |_________|
     ---   |          |         |        |
     ---   1          2         3        4
@@ -223,10 +223,10 @@ We will explore additional type and data constructor declarations, including [pa
     4. the third argument, which is the list which we want to fold.
 * Let's re-examine its type signature:
     ```haskell
-    foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
-    ---     |___|   |________|     |___________|  |___| |____| |_|
-    ---       |          |               |          |     |     |
-    ---       1          2               3          4     5     6
+        foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
+    --- |___|   |________|     |___________|  |___| |____| |_|
+    ---   |          |               |          |     |     |
+    ---   1          2               3          4     5     6
     ```
     Broken down, we have:
     1. the function name,
