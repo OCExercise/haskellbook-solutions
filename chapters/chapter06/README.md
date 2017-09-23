@@ -100,7 +100,7 @@
         1. `(/=)` non-equivalence
     * Instances would bind these operations to data types and provide their implementation.
 * Work through the examples in this section of the text. We won't dwell on them.
-* We can [derive](https://wiki.haskell.org/Keywords#deriving) automagically from a few type classes that are built into Haskell, including `Eq`, `Ord`, `Enum`, `Bounded`, `Read` and `Show`.
+* We can [derive](https://wiki.haskell.org/Keywords#deriving) automagically from a few type classes that are built into Haskell, including `Eq`, `Ord`, `Enum`, `Bounded`, `Read` and `Show`. As the text indicates, we'll get to the nuts and bolts of **deriving** [later](../chapter11/README.md).
 
 ## Writing type class instances
 
