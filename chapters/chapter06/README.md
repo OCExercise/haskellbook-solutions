@@ -96,16 +96,154 @@
     -- a bunch of instance declarations follow, we'll ignore them for now
     ```
     * `Eq` declares two operations:
-        1. `(==)` equivalence
-        1. `(/=)` non-equivalence
+        1. `(==) :: Eq a => a -> a -> Bool` equivalence
+        1. `(/=) :: Eq a => a -> a -> Bool` non-equivalence
     * Instances would bind these operations to data types and provide their implementation.
-* Work through the examples in this section of the text. We won't dwell on them.
+* Constrained types can be contrained even further by applying their operations to arguments:
+    * Partial application
+        ```haskell
+        ghci> :t (==) 2
+        (==) 2 :: (Num a, Eq a) => a -> Bool
+        ```
+    * Complete reduction
+        ```haskell
+        ghci> :t (==) 2 2
+        (==) 2 2 :: Bool
+        ```
+* As the type signature indicates, `Eq`'s operations require arguments to be of the same type. A helpful error is emitted if equality is tested against arguments of different types:
+    ```haskell
+    ghci> "hello" == ("hello", 1)
+
+    <interactive>:12:12: error:
+        • Couldn't match expected type ‘[Char]’
+                      with actual type ‘([Char], Integer)’
+        • In the second argument of ‘(==)’, namely ‘("hello", 1)’
+          In the expression: "hello" == ("hello", 1)
+          In an equation for ‘it’: it = "hello" == ("hello", 1)
+    ```
+* Recall that partial application further constrains the type signature.
+    ```haskell
+    ghci> :t (==) "hello"
+    (==) "hello" :: [Char] -> Bool
+    ```
+    * As you can see, applying the first argument obligates `[Char]` as the type for the second.
+* To understand n-tuple equality, consider typeclass constraints on `(,)`.
+    ```haskell
+    ghci> :info (,)
+    data (,) a b = (,) a b  -- Defined in ‘GHC.Tuple’
+    instance (Bounded a, Bounded b) => Bounded (a, b)
+      -- Defined in ‘GHC.Enum’
+    instance (Eq a, Eq b) => Eq (a, b) -- Defined in ‘GHC.Classes’
+    instance Monoid a => Monad ((,) a) -- Defined in ‘GHC.Base’
+    instance Functor ((,) a) -- Defined in ‘GHC.Base’
+    instance (Ord a, Ord b) => Ord (a, b) -- Defined in ‘GHC.Classes’
+    instance (Read a, Read b) => Read (a, b) -- Defined in ‘GHC.Read’
+    instance (Show a, Show b) => Show (a, b) -- Defined in ‘GHC.Show’
+    instance Monoid a => Applicative ((,) a) -- Defined in ‘GHC.Base’
+    instance Foldable ((,) a) -- Defined in ‘Data.Foldable’
+    instance Traversable ((,) a) -- Defined in ‘Data.Traversable’
+    instance (Monoid a, Monoid b) => Monoid (a, b)
+      -- Defined in ‘GHC.Base’
+    ```
+    * `Bound`, `Eq`, `Ord`, `Show`, `Read` and `Monoid` distribute their constraints to the first and second elements of the 1-tuple.
+        ```haskell
+        ghci> (1, "hello") == (2, [' ', 'w', 'o', 'r', 'l', 'd'])
+        False
+        ghci> (1, "hello") == (1,2)
+
+        <interactive>:24:20: error:
+            • No instance for (Num [Char]) arising from the literal ‘2’
+            • In the expression: 2
+              In the second argument of ‘(==)’, namely ‘(1, 2)’
+              In the expression: (1, "hello") == (1, 2)
+        ```
+    * Haskell defines instances [up to 15-tuple](https://www.haskell.org/onlinereport/basic.html#basic-tuples), and certain operations like `zip` up to 7.
+    ```haskell
+    -- 15 tuple
+
+    ghci> :info (,,,,,,,,,,,,,,)
+    data (,,,,,,,,,,,,,,) a b c d e f g h i j k l m n o
+      = (,,,,,,,,,,,,,,) a b c d e f g h i j k l m n o
+            -- Defined in ‘GHC.Tuple’
+        instance (Bounded a, Bounded b, Bounded c, Bounded d, Bounded e,
+                  Bounded f, Bounded g, Bounded h, Bounded i, Bounded j, Bounded k,
+                  Bounded l, Bounded m, Bounded n, Bounded o) =>
+                 Bounded (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o)
+          -- Defined in ‘GHC.Enum’
+        instance (Eq a, Eq b, Eq c, Eq d, Eq e, Eq f, Eq g, Eq h, Eq i,
+                  Eq j, Eq k, Eq l, Eq m, Eq n, Eq o) =>
+                 Eq (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o)
+          -- Defined in ‘GHC.Classes’
+        instance (Ord a, Ord b, Ord c, Ord d, Ord e, Ord f, Ord g, Ord h,
+                  Ord i, Ord j, Ord k, Ord l, Ord m, Ord n, Ord o) =>
+                 Ord (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o)
+          -- Defined in ‘GHC.Classes’
+        instance (Read a, Read b, Read c, Read d, Read e, Read f, Read g,
+                  Read h, Read i, Read j, Read k, Read l, Read m, Read n, Read o) =>
+                 Read (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o)
+          -- Defined in ‘GHC.Read’
+        instance (Show a, Show b, Show c, Show d, Show e, Show f, Show g,
+                  Show h, Show i, Show j, Show k, Show l, Show m, Show n, Show o) =>
+                 Show (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o)
+          -- Defined in ‘GHC.Show’
+
+
+    -- 16 tuple
+    ghci> :info (,,,,,,,,,,,,,,,)
+    data (,,,,,,,,,,,,,,,) a b c d e f g h i j k l m n o p
+      = (,,,,,,,,,,,,,,,) a b c d e f g h i j k l m n o p
+            -- Defined in ‘GHC.Tuple’
+    ```
 * We can [derive](https://wiki.haskell.org/Keywords#deriving) automagically from a few type classes that are built into Haskell, including `Eq`, `Ord`, `Enum`, `Bounded`, `Read` and `Show`. As the text indicates, we'll get to the nuts and bolts of **deriving** [later](../chapter11/README.md).
 
 ## Writing type class instances
 
+* Type class instances are typically packaged with the data types that require them. Consider this example ([trivial.hs](scratch/trivial.hs)):
+    ```haskell
+    module Trivial where
 
+    data Trivial =
+        Trivial
 
+    instance Eq Trivial where
+        -- infix notation
+        Trivial == Trivial = True
+    ```
+    * Alternatively
+    ```haskell
+    module Trivial where
+
+    data Trivial =
+        Trivial
+
+    instance Eq Trivial where
+        -- prefix notation
+        (==) Trivial Trivial = True
+    ```
+    * **instance** initiates the declaration.
+    * `Eq` is the typeclass we wish to attach to the data type `Trivial`.
+    * `Trivial` is the data type we wish to associate with `Eq` constraining operations.
+    * `Trivial == Trivial = True` or `(==) Trivial Trivial = True` is essentially read "the application of `(==)` to `Trivial` and itself is `True`"
+    * Loading into the REPL, we see that simply defining the equality case automatically buys us its negation.
+        ```haskell
+        ghci> :l scratch/trivial.hs
+        [1 of 1] Compiling Trivial          ( scratch/trivial.hs, interpreted )
+        Ok, modules loaded: Trivial.
+        ghci> Trivial == Trivial
+        True
+        ghci> Trivial /= Trivial
+        False
+        ```
+* Review `DayOfTheWeek` example in the text. Consult the implementation [here](scratch/dayoftheweek.hs) and pay particular attention to the `Eq Date` instance.
+    ```haskell
+    instance Eq Date where
+      (==)  (Date weekday dayOfTheMonth)
+            (Date weekday' dayOfTheMonth') =
+            weekday == weekday'
+        &&  dayOfTheMonth == dayOfTheMonth'
+    ```
+    * Rather than define a length list of cases, we use some math to declare that `Date` equality is satisfied when the equality test on pairs of constituents `DayOfTheWeek` and `Int` (which already have instances) are evaluated.
+*
 ## Num
 
 ## Type-defaulting type classes
@@ -128,3 +266,4 @@
 1. ["OOP vs type classes"](https://wiki.haskell.org/OOP_vs_type_classes), [Haskell Wiki](https://wiki.haskell.org)
 1. ["Research Papers: Type classes"](https://wiki.haskell.org/Research_papers/Type_systems#Type_classes), [Haskell Wiki](https://wiki.haskell.org)
 1. Lipovača, Miran, ["Types and Type Classes"](https://http://learnyouahaskell.com/types-and-type classes), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
+1. ["Tuples"](https://www.haskell.org/onlinereport/basic.html#basic-tuples), [Haskell 98 Language and Libraries: The Revised Report](https://www.haskell.org/onlinereport/index.html), December 2002
