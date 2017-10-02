@@ -3,16 +3,16 @@ module DayOfTheWeek where
 data DayOfTheWeek =
     -- disjoint union (sum type) of value symbols
     -- representing days of the week
-    Mon | Tues | Wed | Thurs | Fri | Sat | Sun
+    Mon | Tue | Wed | Thu | Fri | Sat | Sun
 
 
 -- This is looks pretty but is tedious.
 -- I wonder if there's an easier way?
 instance Eq DayOfTheWeek where
     (==) Mon Mon = True
-    (==) Tues Tues = True
+    (==) Tue Tue = True
     (==) Wed Wed = True
-    (==) Thurs Thurs = True
+    (==) Thu Thu = True
     (==) Fri Fri = True
     (==) Sat Sat = True
     (==) Sun Sun = True
