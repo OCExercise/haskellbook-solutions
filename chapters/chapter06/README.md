@@ -244,84 +244,8 @@
     ```
     * Rather than define a length list of cases, we use some math to declare that `Date` equality is satisfied when the equality test on pairs of constituents `DayOfTheWeek` and `Int` (which already have instances) are evaluated.
 
-### Partial functions - not so strange danger
-
-* **Partially defined functions**, not to be confused with [partial application](../chapter05/README.md#Partial-application), are functions with undefined behavior for certain inputs. The Haskell compiler and REPL will throw errors when encountering these.
-* Consider [dayoftheweek_broken.hs](scratch/dayoftheweek_broken.hs). It omits the final match in the instance declaration which would return false for unequal comparisons. Let's also set `-Wall` in the REPL to examine the errors that will arise in more detail.
-    ```haskell
-    ghci> :set -Wall
-    ghci> :l scratch/dayoftheweek.hs
-    [1 of 1] Compiling DayOfTheWeek     ( scratch/dayoftheweek.hs, interpreted )
-    Ok, modules loaded: DayOfTheWeek.
-    ghci> Mon == Tue
-    False
-    ghci> :l scratch/dayoftheweek_broken.hs
-    [1 of 1] Compiling DayOfTheWeek     ( scratch/dayoftheweek_broken.hs, interpreted )
-
-    scratch/dayoftheweek_broken.hs:9:5: warning: [-Wincomplete-patterns]
-        Pattern match(es) are non-exhaustive
-        In an equation for ‘==’:
-            Patterns not matched:
-                Mon Tue
-                Mon Wed
-                Mon Thu
-                Mon Fri
-                ...
-    Ok, modules loaded: DayOfTheWeek.
-
-
-    ghci> Mon == Tue
-    *** Exception: scratch/dayoftheweek_broken.hs:(9,5)-(15,23): Non-exhaustive patterns in function ==
-    ```
-    * `-Wall` provides us with helpful information, in this case the error tells us that there are conceivable patterns that remain unmatched and therefore undefined.
-* The following (admittedly contrived) example also exhibits this non-exhaustive pattern behavior:
-    ```haskell
-    ghci> f :: Int -> Bool; f 2 = True
-
-    <interactive>:15:19: warning: [-Wincomplete-patterns]
-        Pattern match(es) are non-exhaustive
-        In an equation for ‘f’:
-            Patterns not matched: p where p is not one of {2}
-    ```
-    * We resolve this by adding a case for non-explicitly defined inputs:
-    ```haskell
-    ghci> f :: Int -> Bool; f 2 = True; f _ = False
-    ghci> f 2
-    True
-    ghci> f 3
-    False
-    ```
-* The case handling definition of a function above presages [pattern matching](../chapter07/README.md#Pattern-matching). We will cover **pattern matching** in detail starting in [Chapter 7](../chapter07/README.md).
-
-### Sometimes we need to ask for more
-
-* Instances may use operations that requiring constraining otherwise polymorphically unconstrained types. Consider [identity.hs](scratch/identity.hs).
-    ```haskell
-    data Identity a = Identity a
-
-    -- ...
-
-    instance Eq a => Eq (Identity a) where
-        (==) (Identity v) (Identity v') = v == v'
-    ```
-    A type class constraint `Eq a => ...` is introduced so that the expression `v == v'` makes sense to the compiler.  Without it, we would yield an error (see [identity_insufficient.hs](scratch/identity_insufficient.hs)):
-    ```haskell
-    ghci> :l scratch/identity_insufficient.hs
-    [1 of 1] Compiling Identity         ( scratch/identity_insufficient.hs, interpreted )
-
-    scratch/identity_insufficient.hs:10:39: error:
-        • No instance for (Eq a) arising from a use of ‘==’
-          Possible fix: add (Eq a) to the context of the instance declaration
-        • In the expression: v == v'
-          In an equation for ‘==’: (==) (Identity v) (Identity v') = v == v'
-          In the instance declaration for ‘Eq (Identity a)’
-    Failed, modules loaded: none.
-    ```
-
 
 ## Num
-
-
 
 ## Type-defaulting type classes
 
@@ -342,5 +266,5 @@
 1. ["Type class"](https://en.wikipedia.org/wiki/Type_class), [Wikipedia](https://en.wikipedia.org)
 1. ["OOP vs type classes"](https://wiki.haskell.org/OOP_vs_type_classes), [Haskell Wiki](https://wiki.haskell.org)
 1. ["Research Papers: Type classes"](https://wiki.haskell.org/Research_papers/Type_systems#Type_classes), [Haskell Wiki](https://wiki.haskell.org)
-1. Lipovača, Miran, ["Types and Type Classes"](https://http://learnyouahaskell.com/types-and-type classes), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
+1. Lipovača, Miran, ["Types and Type Classes"](https://http://learnyouahaskell.com/types-and-typeclasses), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
 1. ["Tuples"](https://www.haskell.org/onlinereport/basic.html#basic-tuples), [Haskell 98 Language and Libraries: The Revised Report](https://www.haskell.org/onlinereport/index.html), December 2002
