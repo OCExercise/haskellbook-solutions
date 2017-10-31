@@ -321,9 +321,32 @@
 
 ## Num
 
+* Numbers richly demonstrate the interaction between data types, type classes, and instances.
+    * The following are *data types*:
+        * `Int`: Fixed precision: set of integers defined on the interval  `[-9223372036854775809,9223372036854775807]` or `[-2^63, 2^63]` on a 64-bit architecture.
+        * `Word`: Essentially unsigned int, defined on the interval `[0,18446744073709551616]` or `[0,2^64]` on a 64-bit architecture.
+        * `Integer`: Arbitrary precision integers. Interval not constrained by architecture width.
+        * `Float`: Single-precision floating point
+        * `Double`: Double-precision floating point
+        * `Rational`: Equivalent to `Ratio a`, which is defined in GHC.Real. Represents the rational numbers.
+        * Beyond the base system, there are several other numeric types:
+            * `Ratio a`: Defined in GHC.Real. A [parameterized data type (more on this in Chapter 11)](../chapter11/README.md#Data-and-type-constructors) representing the ratio of of two polymorphic types.  We construct ratios with the infix operator [`%`](http://hackage.haskell.org/package/base-4.10.0.0/docs/Data-Ratio.html#v:-37-), which we will encounter in more detail in [Chapter 24](../chapter24/README.md#Parsing-fractions)
+            * `Complex a`: Represents complex numbers, duh. Notable in that `Ord` is not defined on these, as complex numbers represent a pair and pairs are unordered sets.
+    * The following are *type classes*:
+        * `Eq`: Defines parametrically polymorphic equality
+        * `Bounded`: Defines operations for bounded types. `Word`, `Int`, and `Integer` specifically in the numerical family.
+        * `Ord`: Defines operations for ordered types, with `Complex` being the notable exception in the numeric family.
+        * `Integral`: defines operations on `Int`
+        * `Fractional`: defines operations on types `Num a`
+        * `Real`: defines operations on reals
+        * `Floating`: defines operations on reals and complex numbers
+        * `RealFrac`: defines operations on real fractional numbers
+        * `RealFloat`: defines operations on real floating-point numbers
 
 
 ## Type-defaulting type classes
+
+
 
 ## Ord
 
@@ -344,3 +367,4 @@
 1. ["Research Papers: Type classes"](https://wiki.haskell.org/Research_papers/Type_systems#Type_classes), [Haskell Wiki](https://wiki.haskell.org)
 1. Lipovača, Miran, ["Types and Type Classes"](https://http://learnyouahaskell.com/types-and-type classes), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
 1. ["Tuples"](https://www.haskell.org/onlinereport/basic.html#basic-tuples), [Haskell 98 Language and Libraries: The Revised Report](https://www.haskell.org/onlinereport/index.html), December 2002
+1. ["Numbers"](https://www.haskell.org/tutorial/numbers.html), [A Gentle Introduction to Numbers](https://www.haskell.org/tutorial/index.html), June 2000
