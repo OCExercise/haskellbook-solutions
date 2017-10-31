@@ -346,7 +346,54 @@
 
 ## Type-defaulting type classes
 
+* Numerical computations [specify defaults](https://prime.haskell.org/wiki/Defaulting#Proposal1-nametheclass) for flowing from polymorphic representation to the monomorphic result the compiler must emit. That is, for a particular operation defined in
+    ```haskell
+    default Num Integer
+    default Real Integer
+    default Enum Integer
+    default Integral Integer
+    default Fractional Double
+    default RealFrac Double
+    default Floating Double
+    default RealFloat Double
+    ```
+    * The text mentions this can be found in the [Haskell Report (2010)](https://www.haskell.org/onlinereport/haskell2010/), but I was unable to find it. In fact, I was only able to find mention of defaulting on the [Haskell Prime](https://prime.haskell.org/) site.
+    * **Note**: evaluating the type of an expression expression like `1 / 2` in the REPL will yield the broadest constrained polymorphic expression. In fact, evaluating the type of an unannotated number typically will not yield a monomorphic type:
+        ```haskell
+        ghci> :t 1 / 2
+        1 / 2 :: Fractional a => a
+        ghci> :t 1.0 / 2
+        1.0 / 2 :: Fractional a => a
+        ghci> :t 1.0 / 2.0
+        1.0 / 2.0 :: Fractional a => a
+        ghci> :t 1.0 `div` 2.0
+        1.0 `div` 2.0 :: (Fractional a, Integral a) => a
+        ghci> :t 1
+        1 :: Num t => t
+        ghci> :t 1.0
+        1.0 :: Fractional t => t
+        ```
+* We can further constrain, even unto monomorphism, more polymorphic operations, but we cannot do the opposite:
+    ```haskell
+    ghci> intProd = (*) :: Int -> Int -> Int
+    ghci> :t intProd
+    intProd :: Int -> Int -> Int
 
+    ghci> integralProd = intProd :: Integral a => a -> a -> a
+
+    <interactive>:54:16: error:
+        • Couldn't match type ‘a1’ with ‘Int’
+          ‘a1’ is a rigid type variable bound by
+            an expression type signature:
+              forall a1. Integral a1 => a1 -> a1 -> a1
+            at <interactive>:54:27
+          Expected type: a1 -> a1 -> a1
+            Actual type: Int -> Int -> Int
+        • In the expression: intProd :: Integral a => a -> a -> a
+          In an equation for ‘integralProd’:
+              integralProd = intProd :: Integral a => a -> a -> a
+
+    ```
 
 ## Ord
 
