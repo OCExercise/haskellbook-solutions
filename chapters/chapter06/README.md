@@ -342,11 +342,11 @@
         * `Floating`: defines operations on reals and complex numbers
         * `RealFrac`: defines operations on real fractional numbers
         * `RealFloat`: defines operations on real floating-point numbers
-
+    * *Instances* are defined for type classes on each of their pertinent monomorphic types. Run `:info <type class>` against the type classes listed above to see the list of instances defined for each one.
 
 ## Type-defaulting type classes
 
-* Numerical computations [specify defaults](https://prime.haskell.org/wiki/Defaulting#Proposal1-nametheclass) for flowing from polymorphic representation to the monomorphic result the compiler must emit. That is, for a particular operation defined in
+* Numerical computations [specify defaults](https://prime.haskell.org/wiki/Defaulting#Proposal1-nametheclass) for flowing from polymorphic representation to the monomorphic result the compiler must emit.
     ```haskell
     default Num Integer
     default Real Integer
@@ -397,12 +397,69 @@
 
 ## Ord
 
+* The `Ord` type class:
+    1. Requires constituent types to have instances be defined for type class `Eq`
+    1. Defines in the base system instances specifically for the primitives `Word`, `Ordering`, `Bool`, `Char`, the numeric types `Int`, `Integer`, `Float`, `Double`, as well as orderable lists and tuples of these constituents.
+* `Ord` contains definitions for operations on orderable types, including the comparison operators.
+
 ## Enum
+
+* The `Enum` typeclass describes a family of types that are **enumerable**--types with "known predecessors and successors." It defines several operations you can discover with `:info Enum`, as well as instances for the primitives as well as lists and tuples thereof.
+* `Enum`'s primary purpose in the base system seems to be as a means of implementing [arithmetic sequences](https://www.haskell.org/onlinereport/haskell2010/haskellch3.html#x8-400003.10).
 
 ## Show
 
+* The `Show` typeclass describes a family of types that are **printable**. That is the `print` function can accept values of these types and (crudely put) display them on some output device. I imagine the actual implementation of Show is considerably more capable than simply printing to a monitor, but this will suffice for now.
+* Like `Enum`, `Show` defines instances for the primitives as well as lists and tuples thereof.
+* `Show` is our second real exposure to how Haskell deals with impure operations (input-output). The first was the `main` function we've encountered several times in exercises in order to prepare a main loop for program execution. Like `main`, the final result of `print` is of type `IO`.
+    ```haskell
+    ghci> :t print
+    print :: Show a => a -> IO ()
+    ```
+    * We will discuss `IO ()` in greater detail in [Chapter 29](../chapter29/README.md). By that point, we'll also have a better understanding of **category theory** and especially **monads** (see chapters [15](../chapter15/README.md) through [18](../chapter18/README.md)) and why we can tolerate this breach in purity.
+
 ## Read
 
+* The `Read` typeclass is essentially `Show`'s inverse. Instead of outputting text to some device, it reads `[Char]` and attempts to parse it into a target (monomorphic) type.
+    ```haskell
+    ghci> read "123" :: Int
+    123
+
+    ghci> x = read "123" :: Int
+    ghci> x
+    123
+    ghci> :t x
+    x :: Int
+
+    ghci> x = read "True" :: Bool
+    ghci> x
+    True
+    ghci> :t x
+    x :: Bool
+    ```
+* `read` must always be supplied a type annotation, or shit happens.
+    ```haskell
+    ghci> read "123"
+    *** Exception: Prelude.read: no parse
+    ```
+* `read` must always be supplied a **parseable** type annotation, or shit happens.
+    ```haskell
+    ghci> read "123" :: Bool
+    *** Exception: Prelude.read: no parse
+    ```
+* `read` will blow up if you try to do something trivial like this:
+    ```haskell
+    ghci> read "123" :: [Char]
+    *** Exception: Prelude.read: no parse
+    ghci> read "a" :: Char
+    *** Exception: Prelude.read: no parse
+    ```
+* And most importantly, `read` must be pinned to a monomorphism.
+    ```haskell
+    ghci> read "123" :: Num a => a
+    *** Exception: Prelude.read: no parse
+    ```
+    
 ## Instances are dispatched by type
 
 ## Gimme more operations
