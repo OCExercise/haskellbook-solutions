@@ -409,7 +409,7 @@
 
 ## Show
 
-* The `Show` typeclass describes a family of types that are **printable**. That is the `print` function can accept values of these types and (crudely put) display them on some output device. I imagine the actual implementation of Show is considerably more capable than simply printing to a monitor, but this will suffice for now.
+* The `Show` typeclass describes a family of types that are **printable**. That is the `print` function (not actually defined on the `Show` type class, but as a standalone in the [`System.IO`](http://hackage.haskell.org/package/base-4.10.0.0/docs/src/System.IO.html#print) module) can accept values of these types and (crudely put) display them on some output device. I imagine the actual implementation of Show is considerably more capable than simply printing to a monitor, but this will suffice for now.
 * Like `Enum`, `Show` defines instances for the primitives as well as lists and tuples thereof.
 * `Show` is our second real exposure to how Haskell deals with impure operations (input-output). The first was the `main` function we've encountered several times in exercises in order to prepare a main loop for program execution. Like `main`, the final result of `print` is of type `IO`.
     ```haskell
@@ -420,7 +420,8 @@
 
 ## Read
 
-* The `Read` typeclass is essentially `Show`'s inverse. Instead of outputting text to some device, it reads `[Char]` and attempts to parse it into a target (monomorphic) type.
+* The `Read` typeclass is essentially `Show`'s inverse. Instead of defining operations like  text to some device, it reads `[Char]` and attempts to parse it into a target (monomorphic) type.
+* The function `read` is not actually defined on the type class `Read` from [`GHC.Read`](https://www.haskell.org/haddock/libraries/GHC.Read.html), but as a standalone function in the module [`Text.Read`](http://hackage.haskell.org/package/base-4.10.0.0/docs/src/Text.Read.html#read). Its implementation hides some complexity in using `GHC.Read`'s type class functions `readPrec` and `readListPrec`.
     ```haskell
     ghci> read "123" :: Int
     123
@@ -459,7 +460,7 @@
     ghci> read "123" :: Num a => a
     *** Exception: Prelude.read: no parse
     ```
-    
+
 ## Instances are dispatched by type
 
 ## Gimme more operations
