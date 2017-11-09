@@ -463,9 +463,50 @@
 
 ## Instances are dispatched by type
 
+* Type classes declare operations.
+* Instances supply implementations for those declarations for specific concrete or constrained type. This is similar to ad hoc polymorphism in other languages, i.e., Java:
+    ```java
 
+    public static String convertToString(Integer i) { ... }
+
+    public static String convertToString(Double i) { ... }
+    ```
+* Haskell reasons dispatch from invocation of some operation declared by a type class to an instance implementation by inferring the tpe
+    * In Haskell, we might represent the above example like so (in a very contrived fashion to in order to illustrate dispatch). See [printable_number_dispatch.hs](scratch/printable_number_dispatch.hs)):
+    ```haskell
+    module PrintableNumberDispatch where
+
+    class PrintableNumber a where
+      convertNumberToString :: a -> String
+
+    newtype Integerish = Integerish Integer deriving (Eq, Show)
+    newtype Doublish = Doublish Double deriving (Eq, Show)
+
+    instance PrintableNumber Integerish where
+      convertNumberToString x = showIntegerish x
+
+    instance PrintableNumber Doublish where
+      convertNumberToString x = showIntegerish x
+
+    concatPrintableNumbers :: PrintableNumber a => a -> a -> String
+    concatPrintableNumbers x y = concat [(convertNumberToString x), ", ", (convertNumberToString y)]
+
+    ```
+    * Within the REPL:
+    ```haskell
+    ghci> :l scratch/printable_number_dispatch.hs
+    [1 of 1] Compiling PrintableNumberDispatch ( scratch/printable_number_dispatch.hs, interpreted )
+    ghci> :t (concatPrintableNumbers (Integerish 1))
+    (concatPrintableNumbers (Integerish 1)) :: Integerish -> String
+    ghci> :t (concatPrintableNumbers (Doublish 1))
+    (concatPrintableNumbers (Doublish 1)) :: Doublish -> String
+    ```
+    * The above is a truly horrid example. The function `show` does pretty much what we want against any type constrained by `Show a`, whereas we've defined **two** operations each limited to a concrete type.
+    * We implement the contrived examples [instance_dispatch.hs](instance_dispatch.hs) and [instance_dispatch2.hs](instance_dispatch2.hs) in the text to further illustrate.
 
 ## Gimme more operations
+
+
 
 ## Additional Reading
 
