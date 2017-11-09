@@ -502,11 +502,48 @@
     (concatPrintableNumbers (Doublish 1)) :: Doublish -> String
     ```
     * The above is a truly horrid example. The function `show` does pretty much what we want against any type constrained by `Show a`, whereas we've defined **two** operations each limited to a concrete type.
-    * We implement the contrived examples [instance_dispatch.hs](instance_dispatch.hs) and [instance_dispatch2.hs](instance_dispatch2.hs) in the text to further illustrate.
+    * We implement the contrived examples [instance_dispatch.hs](scratch/instance_dispatch.hs) and [instance_dispatch2.hs](scratch/instance_dispatch2.hs) in the text to further illustrate.
 
 ## Gimme more operations
 
+* Very few operations that can be performed on unconstrained polymorphism yields. Put another way, there are few operations that can be defined **regardless** of type. I need to see if I can prove this, but I believe they'd all fall in the category of or would be isomorphic too:
+    - List operations
+    - Tuple operations
+* Operations can be grouped under type classes that collect constrained types and define instances thereafter. Consider this example:
+    ```haskell
+    module ProductBroken where
 
+    mult :: a -> a -> a
+    mult = (*) -- this is point-free notation
+    ```
+    * Attempting to load [scratch/product_broken.hs](scratch/product_broken.hs) will result in an error and admonition to constrain `mult` to type class `Num a` (Haskell is *very* smart, and it's smart because its type ecosystem makes it easier to reason about several classes of errors and provide helpful suggestions).
+    ```haskell
+    ghci> :l scratch/product_broken.hs
+    [1 of 1] Compiling ProductBroken    ( scratch/product_broken.hs, interpreted )
+
+    scratch/product_broken.hs:4:8: error:
+        • No instance for (Num a) arising from a use of ‘*’
+          Possible fix:
+            add (Num a) to the context of
+              the type signature for:
+                mult :: a -> a -> a
+        • In the expression: (*)
+          In an equation for ‘mult’: mult = (*)
+    Failed, modules loaded: none.
+
+    ```
+    * The fixed version:
+    ```haskell
+    module ProductFixed where
+
+    mult :: Num a => a -> a -> a
+    mult = (*) -- this is point-free notation
+    ```
+* If we were to use concrete types in our function definition, we would inherit all the operations for every instance that covers said type under a type class.  For example, the following compiles because `(*)` is defined for `Int` in whatever relevant type classes define instances for `Int`:
+    ```haskell
+    mult :: Int -> Int -> Int
+    mult = (*)
+    ```
 
 ## Additional Reading
 
