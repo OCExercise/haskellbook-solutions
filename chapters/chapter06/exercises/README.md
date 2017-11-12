@@ -55,7 +55,20 @@ Determine if the following `Ord` operations will work on the operands supplied.
 
 ### Multiple Choice
 
+1. The `Eq` class
+    1. `c)` makes equality tests possible.
+1. The type class `Ord`
+    1. `b)` is a subclass of `Eq`. This is what the notation `class Eq a => Ord a` signifies
+1. Suppose the typeclass `Ord` has an operator `>`. What is the type of `>`?
+    1. d
+1. In `x = divMod 6 12`
+    1. `c)` the type of `x` is a tuple.
+1. The type class `Integral` includes
+    1. `a)` Int and Integer numbers
+
 ### Does it typecheck?
+
+
 
 ### Given a datatype declaration, what can we do?
 
