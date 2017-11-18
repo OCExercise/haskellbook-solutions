@@ -1,4 +1,4 @@
-# More functional patterns
+# Chapter title
 
 ## Directions
 
