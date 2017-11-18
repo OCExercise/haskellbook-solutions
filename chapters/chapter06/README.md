@@ -33,8 +33,9 @@
 
 ## Back to Bool
 
-* [Data types](../chapter04/README.md) can be constrained by type classes given the following specification (`:info` leaves out the implementation, so don't forget it):  
+* [Data types](../chapter04/README.md) can be constrained by type classes given the following specification (`:info` leaves out the implementation, so don't forget it):
     ```haskell
+    --
     ghci> :info Bool
     data Bool = False | True        -- Defined in ‘GHC.Types’
     instance Bounded Bool -- Defined in ‘GHC.Enum’
