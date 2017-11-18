@@ -60,7 +60,7 @@ Determine if the following `Ord` operations will work on the operands supplied.
 1. The type class `Ord`
     1. `b)` is a subclass of `Eq`. This is what the notation `class Eq a => Ord a` signifies
 1. Suppose the typeclass `Ord` has an operator `>`. What is the type of `>`?
-    1. d
+    1. `a) Ord a => a -> a -> Bool`
 1. In `x = divMod 6 12`
     1. `c)` the type of `x` is a tuple.
 1. The type class `Integral` includes
@@ -68,9 +68,86 @@ Determine if the following `Ord` operations will work on the operands supplied.
 
 ### Does it typecheck?
 
+1. Consider the following:
+    ```haskell
+    data Person = Person Bool
 
+    printPerson :: Person -> IO ()
+    printPerson person = putStrLn (show person)
+    ```
+    1. No. Data type `Person` has no instances for `Show`. Consider deriving it.
+1. Consider the following:
+    ```haskell
+    data Mood = Blah | Woot deriving Show
+
+    settleDown x = if x == Woot
+                    then Blah
+                    else x
+    ```
+    1. No. Data type `Mood` has no instances for `Eq`. Consider deriving it:
+    1. Fix the above so that it type checks.
+        ```haskell
+        data Mood = Blah | Woot deriving (Show, Eq)
+
+        settleDown x = if x == Woot
+                        then Blah
+                        else x
+        ```
+        1. Acceptable inputs to `settleDown` are a) `Woot` and b) `Blah` once fixed.
+        1. `settleDown 9` will fail because its type is `settleDown :: Mood -> Mood`. `9` is type `Num a => a`.
+        1. Comparison will fail because `Mood` has no instances for `Ord`. Consider deriving it (along with `Eq`), the absence of which will also produce an error.
+            ```haskell
+            data Mood = Blah | Woot deriving (Show, Eq, Ord)
+
+            settleDown x = if x == Woot
+                            then Blah
+                            else x
+            ```
+    1. Does the following type check? If not,  then why not?
+        ```haskell
+        type Subject = String
+        type Verb = String
+        type Object = String
+
+        data Sentence = Sentence Subject Verb Object
+
+        s1 = Sentence "dogs" "drool"
+        s2 = Sentence "Julie" "loves" "dogs"
+        ```
+        1. The above statements will evaluate without error. Furthermore, `s2` will evaluate properly. However, attempting to evaluate `s1` will result in an error:
+            ```
+            ghci> s1
+
+            <interactive>:11:1: error:
+                • No instance for (Show (Object -> Sentence))
+                    arising from a use of ‘print’
+                    (maybe you haven't applied a function to enough arguments?)
+                • In a stmt of an interactive GHCi command: print it
+
+            ```
+            This is because s1 applied to only two of three arguments yields a function, still waiting for its application to an argument of type `Object`, and functions do not implement instances for type class `Show` ([see here](https://wiki.haskell.org/Show_instance_for_functions)).
+            ```haskell
+            ghci> s1 "lots"
+            Sentence "dogs" "drool" "lots"
+            ```
 
 ### Given a datatype declaration, what can we do?
+
+Our data type declarations:
+```haskell
+data Rocks = Rocks String deriving (Eq, Show)
+data Yeah = Yeah Bool deriving (Eq, Show)
+data Papu = Papu Rocks Yeah deriving (Eq, Show)
+```
+
+1. `phew = Papu "chases" True`
+    1. No. The `Papu` type constructor expects types `Rocks String` and `Yeah Bool`, not `[Char]` and `Bool`.
+1. `truth = (Rocks "chomskydoz") (Yeah True)`
+    1. Yes.
+1. `equalityForall :: Papu -> Papu -> Bool; equalityForAll p p' = p == p'`
+    1. Yes.
+1. `equalityForall :: Papu -> Papu -> Bool; equalityForAll p p' = p > p'`
+    1. No. We have not supplied instances for `Papu` within the type class `Ord`.
 
 ### Match the types
 
