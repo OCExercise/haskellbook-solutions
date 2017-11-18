@@ -545,11 +545,12 @@
     mult = (*)
     ```
 
+
 ## Additional Reading
 
 1. ["Type class"](https://en.wikipedia.org/wiki/Type_class), [Wikipedia](https://en.wikipedia.org)
 1. ["OOP vs type classes"](https://wiki.haskell.org/OOP_vs_type_classes), [Haskell Wiki](https://wiki.haskell.org)
 1. ["Research Papers: Type classes"](https://wiki.haskell.org/Research_papers/Type_systems#Type_classes), [Haskell Wiki](https://wiki.haskell.org)
-1. Lipovača, Miran, ["Types and Type Classes"](https://http://learnyouahaskell.com/types-and-type classes), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
+1. Lipovača, Miran, ["Types and Type Classes"](http://learnyouahaskell.com/types-and-typeclasses), [Learn You A Haskell for Great Good!](https://http://learnyouahaskell.com/)
 1. ["Tuples"](https://www.haskell.org/onlinereport/basic.html#basic-tuples), [Haskell 98 Language and Libraries: The Revised Report](https://www.haskell.org/onlinereport/index.html), December 2002
 1. ["Numbers"](https://www.haskell.org/tutorial/numbers.html), [A Gentle Introduction to Numbers](https://www.haskell.org/tutorial/index.html), June 2000
