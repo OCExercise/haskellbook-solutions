@@ -56,15 +56,15 @@ Determine if the following `Ord` operations will work on the operands supplied.
 ### Multiple Choice
 
 1. The `Eq` class
-    1. `c)` makes equality tests possible.
+    * `c)` makes equality tests possible.
 1. The type class `Ord`
-    1. `b)` is a subclass of `Eq`. This is what the notation `class Eq a => Ord a` signifies
+    * `b)` is a subclass of `Eq`. This is what the notation `class Eq a => Ord a` signifies
 1. Suppose the typeclass `Ord` has an operator `>`. What is the type of `>`?
-    1. `a) Ord a => a -> a -> Bool`
+    * `a) Ord a => a -> a -> Bool`
 1. In `x = divMod 6 12`
-    1. `c)` the type of `x` is a tuple.
+    * `c)` the type of `x` is a tuple.
 1. The type class `Integral` includes
-    1. `a)` Int and Integer numbers
+    * `a)` Int and Integer numbers
 
 ### Does it typecheck?
 
@@ -75,7 +75,7 @@ Determine if the following `Ord` operations will work on the operands supplied.
     printPerson :: Person -> IO ()
     printPerson person = putStrLn (show person)
     ```
-    1. No. Data type `Person` has no instances for `Show`. Consider deriving it.
+    * No. Data type `Person` has no instances for `Show`. Consider deriving it.
 1. Consider the following:
     ```haskell
     data Mood = Blah | Woot deriving Show
@@ -114,7 +114,7 @@ Determine if the following `Ord` operations will work on the operands supplied.
         s1 = Sentence "dogs" "drool"
         s2 = Sentence "Julie" "loves" "dogs"
         ```
-        1. The above statements will evaluate without error. Furthermore, `s2` will evaluate properly. However, attempting to evaluate `s1` will result in an error:
+        * The above statements will evaluate without error. Furthermore, `s2` will evaluate properly. However, attempting to evaluate `s1` will result in an error:
             ```
             ghci> s1
 
@@ -141,13 +141,13 @@ data Papu = Papu Rocks Yeah deriving (Eq, Show)
 ```
 
 1. `phew = Papu "chases" True`
-    1. No. The `Papu` type constructor expects types `Rocks String` and `Yeah Bool`, not `[Char]` and `Bool`.
+    * No. The `Papu` type constructor expects types `Rocks String` and `Yeah Bool`, not `[Char]` and `Bool`.
 1. `truth = (Rocks "chomskydoz") (Yeah True)`
-    1. Yes.
+    * Yes.
 1. `equalityForall :: Papu -> Papu -> Bool; equalityForAll p p' = p == p'`
-    1. Yes.
+    * Yes.
 1. `equalityForall :: Papu -> Papu -> Bool; equalityForAll p p' = p > p'`
-    1. No. We have not supplied instances for `Papu` within the type class `Ord`.
+    * No. We have not supplied instances for `Papu` within the type class `Ord`.
 
 ### Match the types
 
@@ -166,26 +166,61 @@ data Papu = Papu Rocks Yeah deriving (Eq, Show)
               In an equation for ‘i’: i = 1
         ```
 1. Subtitute `f :: Num a => a` for the declaration in `f :: Float; i = 1.0`
-    1. No. Supplying the literal `1.0` requires adhering to a type class no less constrained than `Fractional a`.
+     * No. Supplying the literal `1.0` requires adhering to a type class no less constrained than `Fractional a`.
 1. Subtitute `f :: Fractional a => a` for the declaration in `f :: Float; i = 1.0`
-    1. Yes. See above.
+     * Yes. See above.
 1. Subtitute `f :: RealFrac a => a` for the declaration in `f :: Float; i = 1.0`
-    1. Yes. `Fractional a` is a superclass of `RealFrac a`
+     * Yes. `Fractional a` is a superclass of `RealFrac a`
 1. Subtitute `freud :: Ord a => a` for the declaration in `freud :: a -> a; freud x = x`
-    1. Yes. `freud :: a -> a` is parametrically polymorphic. Adding a class constraint `Ord a` to the definition simply limits its application to values of type `Ord a`.
+     * Yes. `freud :: a -> a` is parametrically polymorphic. Adding a class constraint `Ord a` to the definition simply limits its application to values of type `Ord a`.
 1. Subtitute `freud' :: Int -> Int` for the declaration in `freud' :: a -> a; freud' x = x`
-    1. Yes. `freud' :: a -> a` is parametrically polymorphic. Adding a class constraint `Int` to the definition simply limits its application to values of type `Int`.
+     * Yes. `freud' :: a -> a` is parametrically polymorphic. Adding a class constraint `Int` to the definition simply limits its application to values of type `Int`.
 1. Substitute `a -> a` for the declaration in `sigmund :: Int -> Int; sigmund x = myX` where `myX = 1 :: Int`.
-    1. No. The presence of `myX`, restricted to concrete type `Int`, and cannot be coerced into a parametrically polymorphic type.
+     * No. The presence of `myX`, restricted to concrete type `Int`, and cannot be coerced into a parametrically polymorphic type.
 1. Substitute `Num a => a -> a` for the declaration in `sigmund' :: Int -> Int; sigmund' x = myX` where `myX = 1 :: Int`.
-    1. No. The presence of `myX`, restricted to concrete type `Int` requires that the function also meet this requirement, or `myX` be coerced via [`fromIntegral`](http://hackage.haskell.org/package/base-4.10.0.0/docs/Prelude.html#v:fromIntegral).
+     * No. The presence of `myX`, restricted to concrete type `Int` requires that the function also meet this requirement, or `myX` be coerced via [`fromIntegral`](http://hackage.haskell.org/package/base-4.10.0.0/docs/Prelude.html#v:fromIntegral).
 1. Substitute `[Int] -> Int` for the declaration in `jung :: Ord a => [a] -> a; jung xs = head (sort xs)`
-    1. Yes. `[Int] -> Int` merely constrains a parametrically polymorphic function to operate on a list of elements of type `Ord a`.
+     * Yes. `[Int] -> Int` merely constrains a parametrically polymorphic function to operate on a list of elements of type `Ord a`.
 1. Substitute `Ord a => [a] - a` for the declaration in `young :: [Char] -> Char; young xs = head (sort xs)`
-    1. Yes. The operations performed do not pin the function's type to a concrete instantiation. Indeed, the function could be maximally specified with `young :: [a] -> a`.
+     * Yes. The operations performed do not pin the function's type to a concrete instantiation. Indeed, the function could be maximally specified with `young :: [a] -> a`.
 1. Substitute `Ord a => [a] -> a` for the declaration in `signifier :: [Char] -> Char; signifier xs = head (mySort xs)` where `mySort :: [Char] -> [Char]; mySort = sort`
-    1. No. `mySort` pins the maximal type `signifier` can specify as `[Char] -> Char`. You must refactor `mySort` to support `Ord a => [a] -> [a]` in order to work.
+     * No. `mySort` pins the maximal type `signifier` can specify as `[Char] -> Char`. You must refactor `mySort` to support `Ord a => [a] -> [a]` in order to work.
 
 ### Type-Kwon-Do Two: Electric Typealoo
 
-We all saw that coming.
+We all saw that coming. Anyways:
+
+1. Consider the following:
+    ```haskell
+    chk :: Eq b => (a -> b) -> a -> b -> Bool; chk = undefined
+    ```
+    1. Our function `chk` consumes a function that maps unconstrained typed `a` to `b` constrained to `Eq b`, then two arguments, `a` and `b`, and results in a value of type `Bool`.
+    1. Therefore, the following satisfies:
+        ```haskell
+        chk :: Eq b => (a -> b) -> a -> b -> Bool; chk f x y = (f x) == y
+        ```
+    1. Provided that we supply a function that maps parametrically polymorphic type `a` to supplied type `b` constrained by `Eq b`, this will work:
+        ```haskell
+        ghci> chk (\x -> x + 1) 1 1
+        False
+
+        ghci> chk (\x -> x + 1) 0 1
+        True
+
+        -- Let's break stuff
+        ghci> chk (\x -> x + 1) 'n' 1
+
+        <interactive>:85:12: error:
+            • No instance for (Num Char) arising from a use of ‘+’
+            • In the expression: x + 1
+              In the first argument of ‘chk’, namely ‘(\ x -> x + 1)’
+              In the expression: chk (\ x -> x + 1) 'n' 1
+        ```
+1. Consider the following:
+    ```haskell
+    arith :: Num b => (a -> b) -> Integer -> a -> b; arith = undefined
+    ```
+    * The following suffices:
+    ```haskell
+    arith :: Num b => (a -> b) -> Integer -> a -> b; arith f i x = fromIntegral i + (f x)
+    ```
