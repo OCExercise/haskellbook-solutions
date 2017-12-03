@@ -64,7 +64,7 @@ For the sake of my fingers, going to use `\` in place of `λ`.
                         = a                     # [z := 1]
     ```
 * Some more complicated examples from Chris:
-    * `(\xy.xxy)(\x.xy)(\x.xz)`:
+    * `(\xy.xxy)(\x.xy)(\x.xz)`
     ```
     (\xy.xxy)(\x.xy)(\x.xz) = (\x.\y.xxy) (\x.xy) (\x.xz)   # curry
                             = (\y.(\x.xy)(\x.xy)y) (\x.xz)  # [x := (\x.xy)]
@@ -73,7 +73,7 @@ For the sake of my fingers, going to use `\` in place of `λ`.
                             = (\x.xy) y                     # [x := (\x.xz)]
                             = yy                            # [x := y]
     ```
-    * `(\xyz.xz(yz))(\mn.m)(\p.p)`:  
+    * `(\xyz.xz(yz))(\mn.m)(\p.p)`
     ```
     (\xyz.xz(yz)) (\mn.m) (\p.p)
                     = (\x.\y.\z.xz(yz)) (\m.\n.m) (\p.p)  # curry
