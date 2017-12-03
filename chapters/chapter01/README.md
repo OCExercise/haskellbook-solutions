@@ -64,7 +64,7 @@ For the sake of my fingers, going to use `\` in place of `λ`.
                         = a                     # [z := 1]
     ```
 * Some more complicated examples from Chris:
-    * `(\xy.xxy)(\x.xy)(\x.xz)`
+    * `(\xy.xxy)(\x.xy)(\x.xz)`  
     ```haskell
     (\xy.xxy)(\x.xy)(\x.xz) = (\x.\y.xxy) (\x.xy) (\x.xz)   # curry
                             = (\y.(\x.xy)(\x.xy)y) (\x.xz)  # [x := (\x.xy)]
