@@ -73,7 +73,7 @@ For the sake of my fingers, going to use `\` in place of `λ`.
                             = (\x.xy) y                     # [x := (\x.xz)]
                             = yy                            # [x := y]
     ```
-    * `(\xyz.xz(yz))(\mn.m)(\p.p)`
+    * `(\xyz.xz(yz))(\mn.m)(\p.p)`  
     ```
     (\xyz.xz(yz)) (\mn.m) (\p.p)
                     = (\x.\y.\z.xz(yz)) (\m.\n.m) (\p.p)  # curry
