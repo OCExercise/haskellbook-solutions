@@ -205,7 +205,210 @@ I'm going to approach this differently from the text and skip to the highlight. 
 
 ## Pattern matching
 
+**Pattern matching** in functional and logic programming languages broadly consists of dispatching execution based on the bound parameters of function. Patterns are matched against **values** (or deconstructed components of values). Values include literals, user-defined data, and tuples and lists of the same.
+
+* Envisioned as a control structure, pattern matching is an alternative to:
+    1.  **if-then-else** and **if-then-else if...-else**.
+    2. [case expressions](#case-expressions)
+    3. [guards](#guards)
+* Pattern matching against numbers. The `_` indicates "match anything, but don't bother binding parameter to a name."
+    ```haskell
+    isItZero :: Integer -> Bool
+    isItZero 0 = True
+    isItZero _ = False
+    ```
+* Pattern matching against numbers, this time binding parameters to names
+    ```haskell
+    -- Need to supply Num, Eq, and Ord to the signature for
+    -- the compiler to deduce all the necessary types for function
+    -- parameters to operate with a literal number to a maximally
+    -- polymorphic degree.
+    neverAddZero :: (Num a, Eq a, Ord a) => a -> a -> a
+    neverAddZero 0 y = y
+    neverAddZero x 0 = x
+    neverAddZero x y = x + y
+    ```
+* Pattern matching against data constructors (using the [RegisteredUser example](scratch/registeredUser.hs))
+    ```haskell
+
+    newtype Username = Username String
+    newtype AccountNumber = AccountNumber Integer
+
+    data User = UnregisteredUser | RegisteredUser Username AccountNumber
+
+    printUser :: User -> IO ()
+    printUser UnregisteredUser = putStrLn "Unregistered"
+    printUser (RegisteredUser (Username name) (AccountNumber acctNum))
+        = putStrLn $ name ++ " " ++ show acctNum
+
+    -- ...
+
+    ghci> :l scratch/registeredUser.hs
+    [1 of 1] Compiling RegisteredUser   ( scratch/registeredUser.hs, interpreted )
+    Ok, modules loaded: RegisteredUser.
+    ghci> printUser UnregisteredUser
+    Unregistered
+    ghci> printUser (RegisteredUser (Username "Prez") (AccountNumber 1322))
+    Prez 1322
+    ghci>
+
+    ```
+*  Pattern matching against data type constituents (using [penguins.hs](scratch/penguins.hs))
+    ```haskell
+    data WherePenguinsLive =
+            Galapagos
+        |   Antarctica
+        |   Australia
+        |   SouthAfrica
+        |   SouthAmerica
+        deriving (Eq, Show)
+
+    data Penguin = Peng WherePenguinsLive deriving (Eq, Show)
+
+    -- Deconstructing a data type to get at its constituents
+    gimmeWhereTheyLive :: Penguin -> WherePenguinsLive
+    gimmeWhereTheyLive (Peng whereItLives) = whereItLives
+
+    -- ...
+
+    ghci> gimmeWhereTheyLive (Peng Galapagos)
+    Galapagos
+    ghci> gimmeWhereTheyLive (Peng Antarctica)
+    Antarctica
+
+
+
+    -- ...
+
+    -- Given a bunch of penguins, test if any are from Galapagos
+    humboldt = Peng SouthAmerica
+    gentoo = Peng Antarctica
+    macaroni = Peng Antarctica
+    little = Peng Australia
+    galapagos = Peng Galapagos
+
+    galapagosPenguin :: Penguin -> Bool
+    galapagosPenguin (Peng Galapagos) = True
+    galapagosPenguin _ = False
+
+    -- ...
+
+    ghci> antarcticOrGalapagos humboldt
+    False
+    ghci> antarcticOrGalapagos gentoo
+    True
+    ghci> antarcticOrGalapagos galapagos
+    True
+    ```
+* Pattern matching against tuples.
+    ```haskell
+    fst' :: (a,b) -> a
+    fst' (x,_) = x
+    fst'' :: (a,b) -> a
+    fst'' (a,b) = a
+
+    first2 :: (a,b,c) -> (a,b)
+    first2 (x,y,_) = (x,y)
+    first2' :: (a,b,c) -> (a,b)
+    first2' (a,b,c) = (a,b)
+    --
+
+    snd' :: (a,b) -> b
+    snd' (_,y) = y
+    snd'' :: (a,b) -> b
+    snd'' (a,b) = b
+
+    last2 :: (a,b,c) -> (b,c)
+    last2 (_,x,y) = (x,y)
+    last2' :: (a,b,c) -> (b,c)
+    last2' (a,b,c) = (b,c)
+    ```
+
 ## Case expressions
+
+* **Case expressions** recall similar control structures in other languages (i.e., `switch` in C and Java, `case/esac` in Bash). Alternatives to case expressions include:
+    1.  **if-then-else** and **if-then-else if...-else**.
+    2. [pattern matching](#pattern-matching)
+    3. [guards](#guards)
+* Case expressions can match on any data type, and case predicates can be expressions.
+    * Numbers:
+    ```haskell
+
+    -- Symbols `:{` and `:} are how we implement
+    -- multiline expressions within ghci
+    ghci> :{
+        isZero x =
+           case x of
+               0 -> True
+               _ -> False
+    :}
+
+    ghci> isZero 0
+    True
+    ghci> isZero 1
+    False
+    ghci> isZero 1.0
+    False
+    ghci> isZero 0.0
+    True
+    ```
+    * Data types
+    ```haskell
+    ghci> :{
+        printBool x =
+           case x of
+               True -> print "True"
+               _ -> print "False"
+        :}
+
+    ghci> printBool True
+    "True"
+    ghci> printBool False
+    "False"
+    ```
+    * Expressions
+    ```haskell
+    ghci> :{
+        abs' x =
+           case (x < 0) of -- (x < 0) is an expression
+               True -> (-1) * x
+               False -> x
+    :}
+
+    ghci> abs' (-1)
+    1
+    ghci> abs' 1
+    1
+    ghci> abs' 0
+    0
+    ```
+    * Lists
+    ```haskell
+    ghci> :{
+        head' l =
+            case l of
+                [] -> error "list is empty"
+                (x:_) -> x
+
+        tail' l =
+            case l of
+                [] -> error "list is empty"
+                (_:xs) -> xs
+    :}
+
+    ghci> head' []
+    *** Exception: list is empty
+    CallStack (from HasCallStack):
+      error, called at <interactive>:4:15 in interactive:Ghci1
+    ghci> head' [1,2,3]
+    1
+    ghci> tail' []
+    *** Exception: list is empty
+    CallStack (from HasCallStack):
+      error, called at <interactive>:9:15 in interactive:Ghci1
+    ghci> tail' [1,2,3]
+    [2,3]
+    ```
 
 ## Higher order functions
 
@@ -222,3 +425,7 @@ I'm going to approach this differently from the text and skip to the highlight. 
 
 1. ["First-class function"](https://en.wikipedia.org/wiki/First-class_function), [Wikipedia](https://en.wikipedia.org)
 1. ["Function composition"](https://en.wikipedia.org/wiki/Function_composition), [Wikipedia](https://en.wikipedia.org)
+1. ["Pattern matching"](https://en.wikipedia.org/wiki/Pattern_matching), [Wikipedia](https://en.wikipedia.org)
+1. ["Pattern Matching"](http://wiki.c2.com/?PatternMatching), [WikiWikiWeb](http://wiki.c2.com/?WikiWikiWeb)
+1. ["Case Expressions and Pattern Matching"](https://www.haskell.org/tutorial/patterns.html), *[A Gentle Introduction to Haskell, Version 98](https://www.haskell.org/tutorial/index.html)*
+1. ["Haskell/Pattern matching"](https://en.wikibooks.org/wiki/Haskell/Pattern_matching), [Haskell Wikibook](https://en.wikibooks.org/wiki/Haskell)
