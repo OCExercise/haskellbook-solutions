@@ -412,6 +412,31 @@ I'm going to approach this differently from the text and skip to the highlight. 
 
 ## Higher order functions
 
+Functions are first class citizens in Haskell. You can construct them [anonomously](#anonymous-functions), bind them to names, and bind them to the parameters of functions.
+
+* Haskell provides several functions from the jump that should be familiar to folks coming from a functional programming background. Here are a couple of examples:
+    1. `map`
+        ```haskell
+        ghci> f x = x^2
+        ghci> map f [1,2,3,4,5]
+        [1,4,9,16,25]
+        ```
+    1. `foldr`. We'll dive deeper into **folding lists** in [Chapter 10](../chapter10/README.md) (list comprehensions in [Chapter 9](../chapter09/README.md#list-comprehensions)).
+        ```haskell
+        ghci> f x y = x + y
+        ghci> foldr g 0 [1,2,3,4,5]
+
+        ghci> g x y = x * y
+        ghci> foldr h 1 [1..5]
+        120
+
+        -- Let's try a lambda expression using prefix notation
+        -- and a list comprehension
+        ghci> foldl (\x y -> (/) y x) 1 [ x / 10 | x <- [1..10]]
+        4.063492063492064
+        ```
+
+
 ## Guards
 
 ## Function composition
