@@ -12,7 +12,7 @@ Errors are your fault. I wasn't even in town that day. But feel free to [bitch a
 1. [Basic datatypes](chapters/chapter04/README.md) ([solutions](chapters/chapter04/exercises/README.md))
 1. [Types](chapters/chapter05/README.md) ([solutions](chapters/chapter05/exercises/README.md))
 1. [Type Classes](chapters/chapter06/README.md) ([solutions](chapters/chapter06/exercises/README.md))
-1. [More functional patters](chapters/chapter07/README.md) ([solutions](chapters/chapter07/exercises/README.md))
+1. [More functional patterns](chapters/chapter07/README.md) ([solutions](chapters/chapter07/exercises/README.md))
 
 ## AUTHORS
 
