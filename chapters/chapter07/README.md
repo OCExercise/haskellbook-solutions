@@ -330,7 +330,13 @@ I'm going to approach this differently from the text and skip to the highlight. 
     1.  **if-then-else** and **if-then-else if...-else**.
     2. [pattern matching](#pattern-matching)
     3. [guards](#guards)
-* Case expressions can match on any data type, and case predicates can be expressions.
+* Case expressions evaluate a single **expression** and match the resulting value to a [series of patterns](http://learnyouahaskell.com/syntax-in-functions#case-expressions), with the wildcard underscore operator `(_)` to match any expression in the exhaustive case.
+    ```haskell
+    case <expression> of <pattern> <- <result>
+                         <pattern> <- <result>
+                         <pattern> <- <result>
+                         _         <- <result> -- the exhaustive case
+    ```
     * Numbers:
     ```haskell
 
@@ -436,15 +442,271 @@ Functions are first class citizens in Haskell. You can construct them [anonomous
         4.063492063492064
         ```
 
-
 ## Guards
+
+* **Guards** resemble [piecewise functions](https://en.wikipedia.org/wiki/Piecewise). As control structures, guards are alternatives to:
+    1.  **if-then-else** and **if-then-else if...-else**.
+    2. [pattern matching](#pattern-matching)
+    3. [case expresisons](#case-expressions)
+* Like **if-then-else**, guards dispatch based on evaluation of **expressions**. Unlike [pattern matching](#pattern-matching) and [case expressions](#case-expressions), guards do not match values to patterns.
+
+### Writing guard blocks
+
+* The following function is written using **if-then-else** syntax
+    ```haskell
+    abs' :: Num a => a -> a
+    abs' x = if x < 0 then (-x) else x
+    ```
+* Rewriting in guard syntax, we have
+    ```haskell
+    abs' :: Num a => a -> a
+    abs' x
+        | x < 0     = (-x)
+        | otherwise = x
+    ```
+    The keyword `otherwise` serves a similar role to `(_)` in [pattern matching](#pattern-matching) and [case expressions](#case-expressions). If and once all other expressions evaluate to `False`, `otherwise` supplies an exhaustive evaluation to complete the operation.
+* Guards can evaluate several expressions:
+    ```haskell
+    f :: Num a => a -> a
+    f x
+        | x < -1                    = x**2
+        | 1 < x && x < exp(1)       = log(x)
+        | exp(1) <= x || x < 2**32  = x**(1/4) - 3
+        | otherwise                 = 1
+    ```
+* Guards can be used with `where` declarations
+    ```haskell
+    g x
+        | y < 0     = -y
+        | otherwise = y^2
+        where
+            y = x + 2
+    ```
+## Summary of control structures
+
+Let's review what we've learned about:
+1. **if-then-else**
+1. [Pattern matching](#pattern-matching)
+1. [Case expressions](#case-expression)
+1. [Guards](#guards)
+
+To that end, we'll implement a function to determine the nth value of a Fibonacci sequence defined openly on the integers (we'll review **recursion** in [Chapter 8](../chapter08/README.md)).
+
+* **if-then-else** is a control pattern in various languages, functional or otherwise. We will not dwell on it except to note its verbosity ([fib-ifthen.hs](scratch/fib-ifthen.hs)).
+    ```haskell
+    module FibIfThen where
+
+    fib' :: Integral a => a -> a
+    fib' n =
+        if (n == 0)
+            then 1
+            else if (n == 1)
+                then 1
+                else if (n == (-1))
+                  then (-1)
+                  else (n `quot` abs(n)) * (fib' (abs(n)-1) + fib' (abs(n)-2))
+    ```
+* [Pattern matching](#pattern-matching) dispatches based on the value of argument(s) bound to a function's parameters ([fib-pattern.hs](scratch/fib-pattern.hs)).
+    ```haskell
+    module FibPattern where
+
+    fib' :: Integral a => a -> a
+    fib' (-1)  = 1
+    fib' 0     = 1
+    fib' 1     = 1
+    fib' n     = (n `quot` abs(n)) * (fib' (abs(n)-1) + fib' (abs(n)-2))
+    ```
+    The above example highlights an important limitation in matching patterns on values (thus far). Specifically, we have to match on exact values. The patterns supplied cannot be expressions. For example ([fib-pattern-expression.hs](scratch/fib-pattern-expression.hs)):
+    ```haskell
+    module FibPattern where
+
+    fib' :: Integral a => a -> a
+    fib' ((-4) + 3) = 1      -- we've subsituted (-1)
+    fib' (1-1)      = 1      -- we've subsituted 0
+    fib' ((-2) + 3) = 1      -- we've subsituted 1
+    fib' n          = (n `quot` abs(n)) * (fib' (abs(n)-1) + fib' (abs(n)-2))
+    ```
+    Attempting to load or compile the above leads to the following error:
+    ```haskell
+    ghci> :l scratch/fib-pattern-expression.hs
+    [1 of 1] Compiling FibPattern       ( scratch/fib-pattern-expression.hs, interpreted )
+
+    scratch/fib-pattern-expression.hs:4:7: error:
+        Parse error in pattern: (- 4) + 3
+    Failed, modules loaded: none.
+    ```
+    This does not diminish the value of pattern matching, however. Decomposing values by their data constructors, or matching against specific constructions of lists and tuples is enormously useful.
+* [Case expressions](#case-expressions) dispatch based on an *expressions* and a series of patterns, with (`_`) as a wildcard to match any remaining exhaustive cases ([fib-case.hs](scratch/fib-case.hs)):
+    ```haskell
+    module FibCase where
+
+    fib' :: Integral a => a -> a
+    fib' n =
+      case (-1 <= n && n <= 1) of
+        True  -> 1
+        False -> (n `quot` abs(n)) * (fib' (abs(n)-1) + fib' (abs(n)-2))
+
+    -- use the wildcard (_) pattern to match the exhaustive cases
+    fib'' :: Integral a => a -> a
+    fib'' n =
+      case n of
+        -1  -> 1
+        0  -> 1
+        1  -> 1
+        _ -> (n `quot` abs(n)) * (fib' (abs(n)-1) + fib' (abs(n)-2))
+    ```
+* [Guards](#guards) dispatch based on multiple **expressions**. Guards resemble [piecewise functions](https://en.wikipedia.org/wiki/Piecewise) and operate similarly to  ([fib-guard.hs](scratch/fib-guard.hs)):
+    ```haskell
+    module FibGuard where
+
+    fib' :: Integral a => a -> a
+    fib' n
+      | -1 <= n && n <= 1   = 1
+      | otherwise           = (n `quot` abs(n)) * (fib' ((abs(n))-1) + fib' (abs(n)-2))
+
+
+    -- a bit contrived in the second and exhaustive conditions
+    -- to illustrate a three condition guard
+    fib'' :: Integral a => a -> a
+    fib'' n
+      | -1 <= n && n <= 1   = 1
+      | 1 < n               = (fib' (n-1) + fib' (n-2)) -- positive only Fibonacci
+      | otherwise           = (-1) * (fib' ((abs(n))-1) + fib' (abs(n)-2))
+    ```
+    Note we were able to reduce the implementation of Fibonacci to 4 essential lines (including the signature). Guards fucking rock.
+
+Additionally, there is the topic of [pattern guards](https://wiki.haskell.org/Pattern_guard) which we don't dive into right now.
 
 ## Function composition
 
+**Function composition** is closely related in notation and procedure to mathematical form of [function application]() with [the same name](https://en.wikipedia.org/wiki/Function_composition). It is  [pointwise](https://en.wikipedia.org/wiki/Pointwise), a notion we'll encounter when we discuss [pointfree style](#pointfree-style).
+
+* We can rewrite `f(g(x))` (or `f g x`) as `(f . g) x`, where `f` and `g` are functions applied to some argument `x`.
+* Let's take a closer look at the  `(.)` operator:
+    ```haskell
+    ghci> :t (.)
+    (.) :: (b -> c) -> (a -> b) -> a -> c
+    --     |______|    |______|   |_|  |_|
+    --         |           |       |    |
+    --         f           g       x    result
+    ```
+    As stated above, `f` and `g` are functions applied, `x` is the argument
+* To build familiarity, let's examine some operations in which function composition, along with some other techniques we've picked up along the way, produces concise, clear code by reducing the number of parathesis and chaining operations.
+    - In conjunction with the precedence operation (`$`).
+        ```haskell
+        ghci> exp . product $ [0.1..1]
+
+        -- compare and contrast with
+        ghci> exp(product [0.1..1]) -- or
+        ghci> (exp . product) [0.1..1]
+        ```
+    - Partially applied functions can be used to introduce additional arguments into the pipeline.
+        ```haskell
+        ghci> f (a,b) = b
+        ghci> g = (\x y -> x + y/2)
+
+        -- going to break character for a bit and play
+        -- with a list comprehension
+        ghci>  foldl g 0 . map f . take 5 $ [(a,b) | a <- [1..10], b <- [-10..0]]
+
+        -- compare and contrast with
+        ghci> foldl g 0 (map f (take 5 [(a,b) | a <- [1..10], b <- [-10..0]]))
+        ```
+    - A personal favorite of mine: constant time factorial.
+        ```haskell
+        import Math.Gamma -- you may need to install this with stack or cabal
+
+        -- We'll implement this in an even more concise way in the next section
+        ghci> f n = round . exp . lnGamma . fromIntegral  $ n + 1
+        ghci> f 1
+        1
+        ghci> f 2
+        2
+        ghci> f 3
+        6
+        ghci> f 4
+        24
+        ```
+    - Lambda expressions allows us to intercede in the composition of functions. Below is a highly contrived scenario demonstrating the possibility--not the wisdom--of this sort of programming. Given the obvious reasoning speed bump in this example, you should probably never do anything like this.
+        ```haskell
+        ghci> f x = exp(x)
+        ghci> g x = log(x)
+        ghci> g . f $ 1
+        1.0
+        ghci> f . g = \x -> f(g(x + 2))
+        ghci> g . f $ 1
+        3.0
+        ghci> :r            -- useful for clearing the REPL of bound values
+                            -- and functions
+        ```
+
 ## Pointfree style
+
+Pointfree style is a notational approach to expressing composition in **function definition** without reference to **arguments**. It is closely related to [pointwise operations](https://en.wikipedia.org/wiki/Pointwise) on functions, but not precisely the same thing.
+
+* Trivially, pointfree style includes binding functions to new names
+    ```haskell
+    ghci> f x y = x + y
+    ghci> f 2 3
+    5
+    ghci> f = (+)   -- defining function f without respect to arguments
+    ghci> f 2 3
+    5
+    ```
+* More interestingly, pointfree style is most often used to express a new function defined from the composition of others.
+    ```haskell
+    -- sum squares of integers
+    ghci> f = sum . (map (^2))    -- parentheses about map (^2) to emphasize
+                                  -- that it is a partially applied function
+    ghci> f [1..10]
+    385
+    ```
+* From the text, we've implemented the [`Arith2` module](scratch/arith2.hs) (with some slight renaming). Review and reason about the output.
+    ```haskell
+    module Arith2 where
+
+    add :: Int -> Int -> Int
+    add x y = x + y
+
+    add' :: Int -> Int -> Int
+    add = (+)
+
+    inc :: Int -> Int
+    inc = \x -> x + 1
+
+    inc' :: Int -> Int
+    inc' = (+1)
+
+    main :: IO ()
+    main = do
+      print (0::Int)
+      print (add 1 0)
+      print (inc 0)
+      print (inc' 0)
+      print ((inc . inc) 0)
+      print ((inc' . inc) 0)
+      print ((inc . inc') 0)
+      print (negate (inc 0))
+      print ((negate . inc) 0)
+      print ((inc . inc . inc . negate . inc) 0)
+    ```
 
 ## Demonstrating composition
 
+Problem. We would like to implement a function that prints a text representation of anything implementing `Show` to the screen. The canonical implication is [`print`](http://hackage.haskell.org/package/base-4.10.1.0/docs/Prelude.html#v:print), with a type signature of `Show a => a -> IO ()`. As explained in [Chapter 3](../chapter03/README.md), we can use two functions to implement this operation:
+1. [`show`](https://hackage.haskell.org/package/base/docs/Prelude.html#v:show), which takes a value of type `Show a => a` to `String`, and
+1. [`putStrLn`](https://hackage.haskell.org/package/base-4.10.1.0/docs/Prelude.html#v:putStrLn), which takes a type of `String` to `IO ()` (and hence to screen output).
+
+* We previously implemented this in standard notation
+    ```haskell
+    print' :: Show a => a -> IO ()
+    print' s = putStrLn (show s)
+    ```
+* In point free notation, this simple becomes:
+    ```haskell
+    print' :: Show a => a -> IO ()
+    print' = putStrLn . show
+    ```
 
 ## Additional reading
 
@@ -454,3 +716,8 @@ Functions are first class citizens in Haskell. You can construct them [anonomous
 1. ["Pattern Matching"](http://wiki.c2.com/?PatternMatching), [WikiWikiWeb](http://wiki.c2.com/?WikiWikiWeb)
 1. ["Case Expressions and Pattern Matching"](https://www.haskell.org/tutorial/patterns.html), *[A Gentle Introduction to Haskell, Version 98](https://www.haskell.org/tutorial/index.html)*
 1. ["Haskell/Pattern matching"](https://en.wikibooks.org/wiki/Haskell/Pattern_matching), [Haskell Wikibook](https://en.wikibooks.org/wiki/Haskell)
+1. ["Case Expressions"](https://www.haskell.org/onlinereport/haskell2010/haskellch3.html#x8-460003.13), *[Haskell 2010 Language Report](https://www.haskell.org/onlinereport/haskell2010/)*
+1. ["Pattern guard"](https://wiki.haskell.org/Pattern_guard), [Haskell Wiki](https://wiki.haskell.org)
+1. ["Function application"](https://en.wikipedia.org/wiki/Function_application), [Wikipedia](https://en.wikipedia.org)
+1. ["Pointwise"](https://en.wikipedia.org/wiki/Pointwise), [Wikipedia](https://en.wikipedia.org)
+1. ["Function composition"](https://en.wikipedia.org/wiki/Function_composition),
