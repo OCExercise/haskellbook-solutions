@@ -661,6 +661,19 @@ Pointfree style is a notational approach to expressing composition in **function
     ghci> f [1..10]
     385
     ```
+* And as promised, point free constant time factorial:
+    ```haskell
+    ghci> import Math.Gamma
+    ghci> f = round . exp . lnGamma . fromIntegral . (+1)
+    ghci> f 4
+    24
+    ghci> f 40000000
+
+    -- anyone know what this number is? I'm bumping up to
+    -- the max of something
+    -- truncated for aesthetics
+    179769313486231...
+    ```
 * From the text, we've implemented the [`Arith2` module](scratch/arith2.hs) (with some slight renaming). Review and reason about the output.
     ```haskell
     module Arith2 where
