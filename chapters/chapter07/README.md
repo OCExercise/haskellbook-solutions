@@ -720,4 +720,4 @@ Problem. We would like to implement a function that prints a text representation
 1. ["Pattern guard"](https://wiki.haskell.org/Pattern_guard), [Haskell Wiki](https://wiki.haskell.org)
 1. ["Function application"](https://en.wikipedia.org/wiki/Function_application), [Wikipedia](https://en.wikipedia.org)
 1. ["Pointwise"](https://en.wikipedia.org/wiki/Pointwise), [Wikipedia](https://en.wikipedia.org)
-1. ["Function composition"](https://en.wikipedia.org/wiki/Function_composition),
+1. ["Function composition"](https://en.wikipedia.org/wiki/Function_composition), [Wikipedia](https://en.wikipedia.org/)
