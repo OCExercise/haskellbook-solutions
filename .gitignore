@@ -3,4 +3,5 @@
 !*.*
 *.o
 *.hi
+scratch
 .DS_Store
